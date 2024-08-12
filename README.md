@@ -1,5 +1,7 @@
 # Mini-Project
 
+INTRODUCTION
+
 The Mess Management System is a mini-project aimed at improving the way mess facilities are managed in educational institutions and hostels. Traditionally, managing a mess involves a lot of manual work, from tracking student attendance to managing inventory and processing leave requests. This project seeks to replace these manual processes with a digital system that is more efficient, accurate, and user-friendly.
 
 The system is designed with several key modules that cater to both the administrative staff and the students. For the administration, the system allows easy management of student profiles, including adding, updating, and deleting records. It also includes a presence log feature to track the number of students present each day, which is essential for accurate billing and resource management. Students, on the other hand, can access their accounts, view their profiles, and see the current menu and their billing details.
