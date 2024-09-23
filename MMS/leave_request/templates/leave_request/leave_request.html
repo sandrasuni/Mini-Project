@@ -1,0 +1,135 @@
+{% extends 'temp/user.html' %}
+{% block base %}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+    <script>
+        // Function to validate that "To Date" is not less than "From Date"
+        function validateDates() {
+            const fromDate = document.getElementById("from_date").value;
+            const toDate = document.getElementById("to_date").value;
+            const errorField = document.getElementById("dateError");
+
+            if (toDate < fromDate) {
+                errorField.innerHTML = "To Date cannot be earlier than From Date.";
+                return false;  // Prevent form submission
+            } else {
+                errorField.innerHTML = "";  // Clear the error message
+                return true;  // Allow form submission
+            }
+        }
+
+        window.onload = function() {
+            const today = new Date();
+            today.setMinutes(today.getMinutes() - today.getTimezoneOffset());  // Adjust for local time zone
+            const todayFormatted = today.toISOString().split('T')[0];
+            
+            document.getElementById("from_date").setAttribute("min", todayFormatted);
+            document.getElementById("to_date").setAttribute("min", todayFormatted);
+        }
+    </script>
+</head>
+<body>
+<form method="post"  onsubmit="return validateDates()">
+    {% csrf_token %}
+    <center>
+	<table><br><br><br>
+        <div class="col-lg-5">
+                       <div class="card-body rounded-bottom bg-dark p-5">
+                            <h1 style="font-family: 'Times New Roman';color: peru" align="center">LEAVE REQUEST</h1><br>
+                                {% comment %} <div class="form-group">
+                                    <label for="mess_no" style="color: #fff">Mess no:</label>
+                                    <input type="text" name="mess_no" id="mess_no" class="form-control" maxlength="11" placeholder="Enter your Mess No" required>
+                                </div><br> {% endcomment %}
+
+                                {% comment %} <div class="form-group">
+                                    <label for="Department" style="color: #fff">Department:</label>
+                                    <input type="text" name="department" id="Department" class="form-control" maxlength="11" placeholder="Enter your Department" required>
+                                </div><br> {% endcomment %}
+
+                                <div class="form-group">
+                                    <label for="from_date" style="color: #fff">From Date:</label>
+                                    <input type="date" name="from_date" id="from_date" class="form-control" min="{{ dt }}" required>
+                                </div><br>
+
+                                <div class="form-group">
+                                    <label for="to_date" style="color: #fff">To Date:</label>
+                                    <input type="date" name="to_date" id="to_date" class="form-control" min="{{ dt }}" required>
+                                </div><br>
+                                <span id="dateError" style="color: red;"></span><br>
+
+                                <div class="form-group">
+                                    <label for="reason" style="color: #fff">Reason:</label>
+                                    <textarea name="reason" id="reason" class="form-control" maxlength="100" placeholder="Enter the reason for your leave" required></textarea>
+                                </div><br>
+
+                                <div>
+                                    <button class="btn btn-primary btn-block p-3"style="font-family: 'Times New Roman'" type="submit">SEND</button>
+                                </div>
+
+                        </div>
+                    </div>
+	</table>
+    </center>
+</form>
+</body>
+</html>
+{% endblock %}
+{% comment %} {% extends 'temp/user.html' %}
+{% block base %}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+</head>
+<body>
+<form method="post">
+    {% csrf_token %}
+    <center>
+	<table><br><br><br>
+        <div class="col-lg-5">
+                       <div class="card-body rounded-bottom bg-dark p-5">
+                            <h1 style="font-family: 'Times New Roman';color: peru" align="center">LEAVE REQUEST</h1><br>
+                                <div class="form-group">
+                                    <label for="mess_no" style="color: #fff">Mess no:</label>
+                                    <input type="text" name="mess_no" id="mess_no" class="form-control" maxlength="11" placeholder="Enter your Mess No" required>
+                                </div><br>
+
+                                <div class="form-group">
+                                    <label for="Department" style="color: #fff">Department:</label>
+                                    <input type="text" name="department" id="Department" class="form-control" maxlength="11" placeholder="Enter your Department" required>
+                                </div><br>
+
+                                <div class="form-group">
+                                    <label for="from_date" style="color: #fff">From Date:</label>
+                                    <input type="date" name="from_date" id="from_date" class="form-control" min="{{ dt }}" required>
+                                </div><br>
+                                <div class="form-group">
+                                    <label for="to_date" style="color: #fff">To Date:</label>
+                                    <input type="date" name="to_date" id="to_date" class="form-control" min="{{ dt }}" required>
+                                </div><br>
+
+                                <div class="form-group">
+                                    <label for="reason" style="color: #fff">Reason:</label>
+                                    <textarea name="reason" id="reason" class="form-control" maxlength="100" placeholder="Enter the reason for your leave" required></textarea>
+                                </div><br>
+
+                                <div>
+                                    <button class="btn btn-primary btn-block p-3"style="font-family: 'Times New Roman'" type="submit">SEND</button>
+                                </div>
+
+                        </div>
+                    </div>
+
+
+	</table>
+    </center>
+</form>
+</body>
+</html>
+{% endblock %} {% endcomment %}

@@ -1,0 +1,104 @@
+{% extends 'Temp/admin.html' %}
+{% block base %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Add Student</title>
+    <script>
+        // Function to check if the selected date is today's date
+        function validateDate() {
+            const today = new Date();
+            today.setMinutes(today.getMinutes() - today.getTimezoneOffset());  // Adjust for local time zone
+    
+            const todayFormatted = today.toISOString().split('T')[0];  // Get today's date in "YYYY-MM-DD" format
+            const joiningDateField = document.getElementById("joining_date");
+            const errorField = document.getElementById("dateError");
+    
+            if (joiningDateField.value !== todayFormatted) {
+                errorField.innerHTML = "Joining date must be today's date.";
+                joiningDateField.setCustomValidity("Invalid Date");
+            } else {
+                errorField.innerHTML = "";  // Clear the error message
+                joiningDateField.setCustomValidity("");  // Reset validity
+            }
+        }
+    
+        // Set the minimum date to today's date in local time
+        window.onload = function() {
+            const today = new Date();
+            today.setMinutes(today.getMinutes() - today.getTimezoneOffset());  // Adjust for local time zone
+            const todayFormatted = today.toISOString().split('T')[0];
+            
+            document.getElementById("joining_date").setAttribute("min", todayFormatted);
+        }
+    </script>
+    
+</head>
+<body>
+<form method="post">
+    {% csrf_token %}
+    <center>
+        {% comment %} <button id="add_student" class="btn btn-primary btn-block p-3" style="font-family: 'Times New Roman'">Add Student</button>
+        <button id="all_registered" class="btn btn-primary btn-block p-3" style="font-family: 'Times New Roman'">All Registered Students</button> {% endcomment %}
+        <table><br><br><br>
+            <div class="col-lg-5">
+                <div class="card-body rounded-bottom bg-dark p-5" id="add_student">
+                    <h1 style="font-family: 'Times New Roman';color: peru" align="center">Add Student</h1><br>
+
+                    <!-- Joining Date Field -->
+                    <div class="form-group">
+                        <label style="color:white">Joining Date</label>
+                        <input type="date" name="date" id="joining_date"class="form-control p-4" min="{{ dt }}" style="font-family: 'Times New Roman'" placeholder="Enter Joining Date" onchange="validateDate()"  required="required" />
+                        <span id="dateError" style="color: red;"></span>
+                    </div><br>
+
+                    {% comment %} <div class="form-group">
+                        <label for="from_date" style="color: #fff">From Date:</label>
+                        <input type="date" name="from_date" id="from_date" class="form-control" min="{{ dt }}" required>
+                    </div><br> {% endcomment %}
+
+                    <!-- Name Field -->
+                    {% comment %} <div class="form-group">
+                        <input type="text" name="name" class="form-control p-4" style="font-family: 'Times New Roman'" placeholder="Enter Student Name" required="required" />
+                    </div><br> {% endcomment %}
+                    <div class="form-group">
+                        <label style="color:white">Enter Student Name</label>
+                        <input type="text" name="name" class="form-control p-4" style="font-family: 'Times New Roman'" 
+                               placeholder="Enter Student Name" 
+                               required="required" 
+                               pattern="[A-Za-z\s]+" 
+                               title="Only alphabets and spaces are allowed." />
+                    </div><br>
+
+                    <!-- Department Field -->
+                    <div class="form-group">
+                        <label style="color:white">Enter Department</label>
+                        <input type="text" name="department" class="form-control p-4" style="font-family: 'Times New Roman'" placeholder="Enter Department" required="required" pattern="[A-Za-z\s]+" 
+                        title="Only alphabets and spaces are allowed." />
+                    </div><br>
+
+                    <!-- Password Field -->
+                    <div class="form-group">
+                        <label style="color:white">Enter Password</label>
+                        <input type="password" name="password" class="form-control p-4" style="font-family: 'Times New Roman'" placeholder="Enter Password" minlength="6" 
+                        title="Password must be at least 6 characters long." required="required" />
+                    </div><br>
+
+                    <div>
+                        <button class="btn btn-primary btn-block p-3" style="font-family: 'Times New Roman'" type="submit">Add Student</button>
+                    </div>
+                </div>
+            </div>
+        </table>
+    </center>
+    {% if msg != '' %}
+            <script>
+                alert("{{ msg }}");
+            </script>
+    {% endif %}
+</form>
+</body>
+</html>
+{% endblock %}

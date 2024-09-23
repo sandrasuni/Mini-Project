@@ -1,0 +1,61 @@
+{% comment %} {% extends 'Temp/login.html' %} {% endcomment %}
+{% block base %}
+<!DOCTYPE html>
+<html>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+    <link href="/static/css/loginstyle.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="navbar">
+      <div class="home-button">
+          <a href="/Temp/home">Back to Home</a>
+      </div>
+  </div>
+  
+  <center>
+    <form method="post">
+        {% csrf_token %}
+     <table><br><br><br>
+          <div class="wrapper">
+            <h2>CHAITHRAM</h2>
+            {% comment %} <form action="#"> {% endcomment %}
+              <h2>Login</h2>
+                <div class="form-group">
+                    <div class="input-field">
+                <input type="text" name="user" required="required" />
+                <label>Enter your Username</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="input-field">
+                <input type="password" name="password" required="required" />
+                <label>Enter your password</label>
+                </div>
+              </div><br>
+              {% comment %} <div class="forget">
+                <label for="remember">
+                  <input type="checkbox" id="remember">
+                  <p>Remember me</p>
+                </label>
+                <a href="#">Forgot password?</a>
+              </div> {% endcomment %}
+              <button type="submit">LOGIN</button><br><br>
+              {% comment %} <div class="register">
+                <p>Don't have an account? <a href="#">Register</a></p>
+              </div> {% endcomment %}
+            </div>
+            {% comment %} </table> {% endcomment %}
+        </table>
+    </form>
+  <font color="red" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); font-weight: bold; font-size: 15px;">
+      {% if msg %}
+          {{ msg }}
+      {% endif %}
+  </font>
+ </center>
+</body>
+</html>
+
+{% endblock %}

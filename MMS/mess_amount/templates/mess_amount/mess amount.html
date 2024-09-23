@@ -1,0 +1,82 @@
+{% extends 'temp/admin.html' %}
+{% block base %}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+    {% comment %} <style>
+        /* Optional custom styling to ensure the buttons align properly */
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px; /* Space between the buttons */
+        }
+    </style> {% endcomment %}
+</head>
+<body>
+<form method="post">
+    {% csrf_token %}
+    <center>
+	<table><br><br><br>
+        <div class="col-lg-5">
+                       <div class="card-body rounded-bottom bg-dark p-5">
+                            <h1 style="font-family: 'Times New Roman';color: peru" align="center">Mess Amount</h1><br>
+                                <div class="form-group">
+                                    <label for="mess_amount" style="color: #fff">Per Day Amount</label>
+                                    <input type="text" name="mess_amount" id="mess_amount" value="{{ d.daily_amount }}" class="form-control" placeholder="Enter Mess Amount" required>
+                                </div><br>
+
+                                <!-- Use a flexbox container to align buttons side by side -->
+                                <div class="button-group">
+                                    <button class="btn btn-primary p-3" style="font-family: 'Times New Roman'" type="submit" name="action" value="save">SAVE</button>
+                                    {% comment %} <a href="" class="btn btn-primary p-3" style="font-family: 'Times New Roman'">UPDATE</a> {% endcomment %}
+                                </div>
+
+                        </div>
+                    </div>
+	</table>
+    </center>
+</form>
+</body>
+</html>
+{% endblock %}
+
+
+{% comment %} {% extends 'temp/admin.html' %}
+{% block base %}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+    
+</head>
+<body>
+<form method="post">
+    {% csrf_token %}
+    <center>
+	<table><br><br><br>
+        <div class="col-lg-5">
+                       <div class="card-body rounded-bottom bg-dark p-5">
+                            <h1 style="font-family: 'Times New Roman';color: peru" align="center">Mess Amount</h1><br>
+                                <div class="form-group">
+                                    <label for="mess_amount" style="color: #fff">Mess Amount</label>
+                                    <input type="text" name="mess_amount" id="mess_amount" value="{{ dd.mess_amount }}" class="form-control" placeholder="Enter Mess Amount" required>
+                                </div><br>
+
+                                <div>
+                                    <button class="btn btn-primary btn-block p-3"style="font-family: 'Times New Roman'" type="submit">SAVE</button> <div><br>
+                                    <button class="btn btn-primary btn-block p-3" style="font-family: 'Times New Roman'" type="submit">UPDATE</button>
+                                </div>
+
+                        </div>
+                    </div>
+	</table>
+    </center>
+</form>
+</body>
+</html>
+{% endblock %} {% endcomment %}

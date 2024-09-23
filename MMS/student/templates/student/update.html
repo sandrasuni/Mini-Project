@@ -1,0 +1,51 @@
+{% extends 'Temp/admin.html' %}
+{% block base %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Update or Delete Student</title>
+</head>
+<body>
+<form method="post">
+    {% csrf_token %}
+    <center>
+        <table><br><br><br>
+            <div class="col-lg-5">
+                <div class="card-body rounded-bottom bg-dark p-5" id="all_registered">
+                    <h1 style="font-family: 'Times New Roman';color: peru" align="center">Update Students</h1><br>
+
+                    <!-- Joining Date Field -->
+                    <div class="form-group">
+                        <input type="date" name="date" value="{{ dt }}" class="form-control p-4" style="font-family: 'Times New Roman'" placeholder="Enter Joining Date" required="required" />
+                    </div><br>
+                    
+                    <!-- Name Field -->
+                    <div class="form-group">
+                        <input type="text" name="ne" value="{{ dd.name }}" class="form-control p-4" style="font-family: 'Times New Roman'" placeholder="Enter Student Name" required="required" />
+                    </div><br>
+
+                    <!-- Mess Number Field -->
+                    <div class="form-group">
+                        <input type="text" name="d" value="{{ dd.department }}" class="form-control p-4" style="font-family: 'Times New Roman'" placeholder="Enter Mess Number" required="required" />
+                    </div><br>
+
+                    {% comment %} <!-- Password Field -->
+                    <div class="form-group">
+                        <input type="password" name="password" class="form-control p-4" style="font-family: 'Times New Roman'" placeholder="Enter Password" />
+                        <small>Leave blank to keep the current password.</small>
+                    </div><br> {% endcomment %}
+
+                    <!-- Update Button -->
+                    <div>
+                        <button class="btn btn-primary btn-block p-3" style="font-family: 'Times New Roman'" type="submit">Update Student</button>
+                    </div>
+                </div>
+            </div>
+        </table>
+    </center>
+</form>
+</body>
+</html>
+{% endblock %} 
