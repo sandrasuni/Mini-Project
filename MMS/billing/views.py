@@ -38,11 +38,6 @@ from mess_amount.models import MessAmount
 from student.models import Student
 from django.utils import timezone
 
-from django.shortcuts import render
-from billing.models import MessBill
-from mess_amount.models import MessAmount
-from student.models import Student
-
 def mesb(request):
     # Fetch all the mess amounts and students
     mess_amounts = MessAmount.objects.all()
@@ -78,5 +73,43 @@ def mesb(request):
 
     return render(request, 'billing/billing.html', context)
 
+from django.http import HttpResponse
+from .models import MessBill  # Assuming you have a model for bills
 
+from django.shortcuts import render
+from .models import MessBill
+from collections import defaultdict
 
+def mess_bill_view(request):
+    search_query = request.POST.get('search', '')
+    selected_month = request.POST.get('month', '')
+    selected_year = request.POST.get('year', '')
+
+    # Get all years for the dropdown
+    years = MessBill.objects.values_list('date__year', flat=True).distinct().order_by('date__year')
+
+    # Filter bills based on the selected month and year
+    bills = MessBill.objects.all()
+
+    if selected_month and selected_year:
+        bills = bills.filter(date__month=selected_month, date__year=selected_year)
+
+    # If there's a search query, filter further
+    if search_query:
+        bills = bills.filter(mess_no__icontains=search_query) | bills.filter(student_name__icontains=search_query)
+
+    # Organize bills by date
+    bills_by_date = defaultdict(list)
+    for bill in bills:
+        bills_by_date[bill.date.day].append(bill)
+
+    # Prepare data for the template
+    context = {
+        'search_query': search_query,
+        'selected_month': selected_month,
+        'selected_year': selected_year,
+        'years': years,
+        'bills_by_date': bills_by_date,
+    }
+
+    return render(request, 'billing/vstu_bill.html', context)

@@ -1,0 +1,249 @@
+{% extends 'Temp/user.html' %}
+{% block base %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Menu by Day</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+
+        h1 {
+            color: #001F3F;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        select {
+            padding: 8px;
+            font-size: 16px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #001F3F; /* Dark background color */
+            color: white;
+        }
+        
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        h2 {
+            color: #001F3F;
+            margin-top: 40px;
+        }
+
+        .no-items {
+            text-align: center;
+            font-style: italic;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <center><h1>Menu by Day</h1></center><br>
+
+    <!-- Simple form to select the day -->
+    <form method="GET">
+        <center><label for="day">Select Day:</label>
+        <select name="day" onchange="this.form.submit()">
+            <option value="">--Select Day--</option>
+            <option value="monday" {% if selected_day == 'monday' %}selected{% endif %}>Monday</option>
+            <option value="tuesday" {% if selected_day == 'tuesday' %}selected{% endif %}>Tuesday</option>
+            <option value="wednesday" {% if selected_day == 'wednesday' %}selected{% endif %}>Wednesday</option>
+            <option value="thursday" {% if selected_day == 'thursday' %}selected{% endif %}>Thursday</option>
+            <option value="friday" {% if selected_day == 'friday' %}selected{% endif %}>Friday</option>
+            <option value="saturday" {% if selected_day == 'saturday' %}selected{% endif %}>Saturday</option>
+            <option value="sunday" {% if selected_day == 'sunday' %}selected{% endif %}>Sunday</option>
+        </select></center>
+    </form>
+
+    <!-- Show the menu for the selected day -->
+    {% if selected_day %}
+        <center><h2>Menu for {{ selected_day|title }}</h2></center>
+
+        <h3>Breakfast</h3>
+        {% if breakfast_menu %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in breakfast_menu %}
+                        <tr>
+                            <td>{{ item.item_name }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="no-items">No breakfast items set for {{ selected_day|title }}.</p>
+        {% endif %}
+        <br>
+        <h3>Lunch</h3>
+        {% if lunch_menu %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in lunch_menu %}
+                        <tr>
+                            <td>{{ item.item_name }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="no-items">No lunch items set for {{ selected_day|title }}.</p>
+        {% endif %}
+        <br>
+        <h3>Dinner</h3>
+        {% if dinner_menu %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in dinner_menu %}
+                        <tr>
+                            <td>{{ item.item_name }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="no-items">No dinner items set for {{ selected_day|title }}.</p>
+        {% endif %}
+        <br>
+        <h3>Special Menu</h3>
+        {% if special_menu %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ special_menu.item_name }}</td>
+                        <td>${{ special_menu.price }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        {% else %}
+            <p class="no-items">No special menu set for {{ selected_day|title }}.</p>
+        {% endif %}
+    {% else %}
+        <p>Please select a day to view the menu.</p>
+    {% endif %}
+</body>
+</html>
+{% endblock %}
+
+
+{% comment %} 
+{% extends 'Temp/user.html' %}
+{% block base %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Menu by Day</title>
+</head>
+<body>
+    <h1>View Menu by Day</h1>
+
+    <!-- Simple form to select the day -->
+    <form method="GET">
+        <label for="day">Select Day:</label>
+        <select name="day" onchange="this.form.submit()">
+            <option value="">--Select Day--</option>
+            <option value="monday" {% if selected_day == 'monday' %}selected{% endif %}>Monday</option>
+            <option value="tuesday" {% if selected_day == 'tuesday' %}selected{% endif %}>Tuesday</option>
+            <option value="wednesday" {% if selected_day == 'wednesday' %}selected{% endif %}>Wednesday</option>
+            <option value="thursday" {% if selected_day == 'thursday' %}selected{% endif %}>Thursday</option>
+            <option value="friday" {% if selected_day == 'friday' %}selected{% endif %}>Friday</option>
+            <option value="saturday" {% if selected_day == 'saturday' %}selected{% endif %}>Saturday</option>
+            <option value="sunday" {% if selected_day == 'sunday' %}selected{% endif %}>Sunday</option>
+        </select>
+    </form>
+
+    <!-- Show the menu for the selected day -->
+    {% if selected_day %}
+        <h2>Menu for {{ selected_day|title }}</h2>
+        
+        <h3>Breakfast</h3>
+        {% if breakfast_menu %}
+            <ul>
+                {% for item in breakfast_menu %}
+                    <li>{{ item.item_name }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No breakfast items set for {{ selected_day|title }}.</p>
+        {% endif %}
+        
+        <h3>Lunch</h3>
+        {% if lunch_menu %}
+            <ul>
+                {% for item in lunch_menu %}
+                    <li>{{ item.item_name }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No lunch items set for {{ selected_day|title }}.</p>
+        {% endif %}
+        
+        <h3>Dinner</h3>
+        {% if dinner_menu %}
+            <ul>
+                {% for item in dinner_menu %}
+                    <li>{{ item.item_name }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No dinner items set for {{ selected_day|title }}.</p>
+        {% endif %}
+
+        <h3>Special Menu</h3>
+        {% if special_menu %}
+            <ul>
+                <li>{{ special_menu.item_name }} - ${{ special_menu.price }}</li>
+            </ul>
+        {% else %}
+            <p>No special menu set for {{ selected_day|title }}.</p>
+        {% endif %}
+
+    {% else %}
+        <p>Please select a day to view the menu.</p>
+    {% endif %}
+</body>
+</html>
+{% endblock %}  {% endcomment %}

@@ -3,5 +3,5 @@ from billing import views
 
 urlpatterns=[
     url('billing/',views.mesb),
-    # url('vstubill/',views.view_mess_bill),
+    url('vstubill/',views.mess_bill_view),
  ]

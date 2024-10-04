@@ -121,31 +121,33 @@
     <thead class="bg-secondary">
         <tr>
             <th>Sl.no</th>
-            {% comment %} <th>Mess No</th> {% endcomment %}
-            {% comment %} <th>Student Name</th> {% endcomment %}
             <th>Date</th>
             <th>Mess Amount</th>
             <th>Extra Amount</th>
             <th>Total Amount</th>
         </tr>
     </thead>
-        {% for i in dd %}
+    <tbody>
+        {% if bills_by_date %}
+            {% for date, bills in bills_by_date.items %}
+                {% for bill in bills %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ date }}</td>
+                    <td>{{ bill.mess_amount }}</td>
+                    <td>{{ bill.extra_amount }}</td>
+                    <td>{{ bill.total_amount }}</td>
+                </tr>
+                {% endfor %}
+            {% endfor %}
+        {% else %}
         <tr>
-            <td>{{ forloop.counter }}</td>
-            {% comment %} <td>{{ i.mess_no }}</td>
-            <td>{{ i.student_name }}</td> {% endcomment %}
-            <td></td>
-            <td>{{ i.mess_amount }}</td>
-            <td>{{ i.extra_amount }}</td>
-            <td>{{ i.total_amount }}</td>
+            <td colspan="5" class="no-bills">No bills available for the selected month and year.</td>
         </tr>
-        {% empty %}
-        <tr>
-            <td colspan="6" class="no-bills">No bills available for the selected month and year.</td>
-        </tr>
-        {% endfor %}
-
+        {% endif %}
+    </tbody>
 </table>
+
 </center>
 </body>
 </html>

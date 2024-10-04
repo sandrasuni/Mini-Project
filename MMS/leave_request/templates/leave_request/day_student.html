@@ -1,0 +1,40 @@
+{% extends 'temp/admin.html' %}
+{% block base %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students Present</title>
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+        <center>
+        <table><br><br><br>
+            <div class="col-lg-5">
+                <div class="card-body rounded-bottom bg-dark p-5">
+                    <h1 style="font-family: 'Times New Roman'; color: peru" align="center">Day Student</h1><br>
+                    <div class="form-group">
+                    <label for="date" style="color: #fff">Select Date:</label>
+                    <input type="date" name="date" class="form-control" required>
+                    </div><br>
+                    <button class="btn btn-primary p-3" style="font-family: 'Times New Roman'" type="submit" name="action" value="save">CHECK</button>
+                </div>
+            </div>
+        </table>
+        </center>
+    </form>
+    <br><br>
+    {% if selected_date %}
+    <h5 align="center" style="color: black;">
+        {% if present_count %}
+            Number of students present on {{ selected_date }}: <span style="color: red;"><strong>{{ present_count }}</strong></span>
+        {% else %}
+            No students present on {{ selected_date }}.
+        {% endif %}
+    </h5>
+{% endif %}
+</body>
+</html>
+{% endblock %}

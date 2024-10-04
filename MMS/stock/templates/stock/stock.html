@@ -1,0 +1,286 @@
+{% extends 'Temp/admin.html' %}
+{% block base %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Add Stock</title>
+        <style>
+        .table-container {
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #000;
+        }
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+        .action-btns a {
+            margin: 0 5px;
+        }
+
+        /* Form Container Style */
+        form {
+            margin: 20px 0;
+            font-family: Arial, sans-serif;
+        }
+    
+        /* Label Style */
+        label {
+            font-size: 16px;
+            margin-right: 10px;
+            color: #333;
+            font-weight: bold;
+        }
+    
+       
+        /* Add Some Margin Below the Form */
+        form {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+<form method="post">
+    {% csrf_token %}
+    <center>
+        <table><br><br><br>
+            <div class="col-lg-5">
+                <div class="card-body rounded-bottom bg-dark p-5" id="add_stock">
+                    <h1 style="font-family: 'Times New Roman'; color: peru" align="center">Add Stock</h1><br>
+
+                    <!-- Item Code Field -->
+                    <div class="form-group">
+                        <label style="color:white">Item Code</label>
+                        <input type="text" name="item_code" id="item_code" class="form-control p-4" style="font-family: 'Times New Roman'" 
+                               placeholder="Enter Item Code (Numbers Only)" 
+                               required="required" 
+                               pattern="\d+" 
+                               title="Only integers are allowed."
+                               value="{% if item_code_error %}{{ request.POST.item_code }}{% endif %}" />  <!-- Retain value on error -->
+                        {% if item_code_error %}
+                            <div style="color: red;">{{ item_code_error }}</div>  <!-- Error message for duplicate -->
+                        {% endif %}
+                    </div><br>
+
+                    <!-- Item Name Field -->
+                    <div class="form-group">
+                        <label style="color:white">Item Name</label>
+                        <input type="text" name="item_name" id="item_name" class="form-control p-4" style="font-family: 'Times New Roman'" 
+                               placeholder="Enter Item Name" 
+                               required="required" 
+                               pattern="[A-Za-z\s]+" 
+                               title="Only alphabets and spaces are allowed." 
+                               value="{% if item_code_error %}{{ request.POST.item_name }}{% endif %}" />  <!-- Retain value on error -->
+                    </div><br>
+
+                    <!-- Quantity Field -->
+                    <div class="form-group">
+                        <label style="color:white">Quantity</label>
+                        <input type="number" name="quantity" id="quantity" class="form-control p-4" style="font-family: 'Times New Roman'" 
+                               placeholder="Enter Quantity" 
+                               required="required"
+                               min="1"
+                               value="{% if item_code_error %}{{ request.POST.quantity }}{% endif %}" />
+                    </div><br>
+
+                    <!-- Threshold Field -->
+                    <div class="form-group">
+                        <label style="color:white">Threshold</label>
+                        <input type="number" name="threshold" id="threshold" class="form-control p-4" style="font-family: 'Times New Roman'" 
+                               placeholder="Enter Threshold" 
+                               required="required"
+                               min="1"
+                               value="{% if item_code_error %}{{ request.POST.threshold }}{% endif %}"/>
+                    </div><br>
+
+                    <!-- Price Field -->
+                    <div class="form-group">
+                        <label style="color:white">Price</label>
+                        <input type="number" name="price" id="price" class="form-control p-4" style="font-family: 'Times New Roman'" 
+                               placeholder="Enter Price" 
+                               required="required"
+                               value="{% if item_code_error %}{{ request.POST.price }}{% endif %}" />
+                    </div><br>
+
+                    <!-- Buttons: Add, Update -->
+                    <div class="form-group text-center">
+                        <div class="btn-group" role="group">
+                            <!-- Add Button -->
+                            <button class="btn btn-success" type="submit" name="action" value="add" style="font-family: 'Times New Roman'">
+                                Add Stock
+                            </button>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </table>
+    </center>
+    {% if msg != '' %}
+    <script>
+        alert("{{ msg }}");
+    </script>
+{% endif %}
+</form>
+
+<!-- Display Existing Stock Below the Form -->
+ <br><br><br>
+<center>
+    <h2 style="font-family: 'Times New Roman'; color: black;">Current Stock</h2>
+    <table border="1" class="table table-striped">
+        <thead style="background-color: #001f3f; color: #ffffff;">
+            <tr>
+                <th>Item Code</th>
+                <th>Item Name</th>
+                <th>Quantity</th>
+                <th>Threshold</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stock in stocks %}
+            <tr>
+                <td>{{ stock.item_code }}</td>
+                <td>{{ stock.item_name }}</td>
+                <td>{{ stock.stock_quantity }}</td>
+                <td>{{ stock.threshold }}</td>
+                <td>{{ stock.price }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">No stock added yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</center>
+</body>
+</html>
+{% endblock %}
+
+
+
+{% comment %} {% extends 'Temp/admin.html' %}
+{% block base %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Add Stock</title>
+    <script>
+        // Function to check if quantity is equal to or less than threshold
+        function checkThreshold() {
+            const quantity = document.getElementById("quantity").value;
+            const threshold = document.getElementById("threshold").value;
+
+            if (parseInt(quantity) <= parseInt(threshold)) {
+                alert("Warning: Quantity has reached or is below the threshold value!");
+            }
+        }
+    </script>
+    
+    <!-- Include Bootstrap CSS if not already included -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"> 
+    
+</head>
+<body>
+<form method="post">
+    {% csrf_token %}
+    <center>
+        <table><br><br><br>
+            <div class="col-lg-5">
+                <div class="card-body rounded-bottom bg-dark p-5" id="add_stock">
+                    <h1 style="font-family: 'Times New Roman';color: peru" align="center">Add/Update Stock</h1><br>
+
+                    <!-- Item Code Field -->
+                    <div class="form-group">
+                        <label style="color:white">Item Code</label>
+                        <input type="text" name="item_code" id="item_code" class="form-control p-4" style="font-family: 'Times New Roman'" 
+                               placeholder="Enter Item Code (Numbers Only)" 
+                               required="required" 
+                               min="1"
+                               pattern="\d+"
+                               title="Only integers are allowed." />
+                    </div><br>
+
+                    <!-- Item Name Field -->
+                    <div class="form-group">
+                        <label style="color:white">Item Name</label>
+                        <input type="text" name="item_name" id="item_name" class="form-control p-4" style="font-family: 'Times New Roman'" 
+                               placeholder="Enter Item Name" 
+                               required="required" 
+                               pattern="[A-Za-z\s]+" 
+                               title="Only alphabets and spaces are allowed." />
+                    </div><br>
+
+                    <!-- Quantity Field -->
+                    <div class="form-group">
+                        <label style="color:white">Quantity</label>
+                        <input type="number" name="quantity" id="quantity" class="form-control p-4" style="font-family: 'Times New Roman'" 
+                               placeholder="Enter Quantity" 
+                               required="required"
+                               min="1"
+                               onchange="checkThreshold()" />
+                    </div><br>
+
+                    <!-- Threshold Field -->
+                    <div class="form-group">
+                        <label style="color:white">Threshold</label>
+                        <input type="number" name="threshold" id="threshold" class="form-control p-4" style="font-family: 'Times New Roman'" 
+                               placeholder="Enter Threshold" 
+                               required="required"
+                               min="1"
+                               onchange="checkThreshold()" />
+                    </div><br>
+
+                    <!-- Price Field -->
+                    <div class="form-group">
+                        <label style="color:white">Price</label>
+                        <input type="number" name="price" id="price" class="form-control p-4" style="font-family: 'Times New Roman'" 
+                               placeholder="Enter Price" 
+                               required="required" />
+                    </div><br>
+
+                    <!-- Buttons: Add, Update, Delete -->
+                    <div class="form-group text-center">
+                        <div class="btn-group" role="group">
+                            <!-- Add Button -->
+                            <button class="btn btn-success" type="submit" name="action" value="add" style="font-family: 'Times New Roman'">
+                                Add
+                            </button>
+                    
+                            <!-- Update Button -->
+                            <button class="btn btn-primary" type="submit" name="action" value="update" style="font-family: 'Times New Roman'">
+                                Update
+                            </button>
+                            
+                            <!-- Delete Button -->
+                            {% comment %} <button class="btn btn-danger" type="button" style="font-family: 'Times New Roman'"
+                                    onclick="location.href='{% url 'delete_stock' i.stock_id %}'">
+                                Delete
+                            </button> 
+                        </div>
+                    </div>
+                    
+                    </div>
+                </div>
+            </div>
+        </table>
+    </center>
+    {% if msg != '' %}
+            <script>
+                alert("{{ msg }}");
+            </script>
+    {% endif %}
+</form>
+</body>
+</html>
+{% endblock %} {% endcomment %}

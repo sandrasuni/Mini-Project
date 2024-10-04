@@ -1,0 +1,539 @@
+{% extends 'Temp/admin.html' %}
+{% block base %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Manage Menu Items</title>
+    {% comment %} <script>
+        function confirmDelete() {
+            return confirm("Are you sure you want to delete this item?");
+        }
+    </script> {% endcomment %}
+    <style>
+        .table-container {
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #000;
+        }
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+        .action-btns a {
+            margin: 0 5px;
+        }
+
+        /* Form Container Style */
+        form {
+            margin: 20px 0;
+            font-family: Arial, sans-serif;
+        }
+    
+        /* Label Style */
+        label {
+            font-size: 16px;
+            margin-right: 10px;
+            color: #333;
+            font-weight: bold;
+        }
+    
+        /* Select Dropdown Style */
+        select {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #4CAF50;
+            border-radius: 5px;
+            background-color: #f2f2f2;
+            color: #333;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+    
+        /* Select Dropdown Hover & Focus Effects */
+        select:hover, select:focus {
+            background-color: #fff;
+            border-color: #45a049;
+            outline: none;
+        }
+    
+        /* Add Some Margin Below the Form */
+        form {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Manage Menu Items</h1>
+<br>
+    <form method="GET" action="{% url 'manage' %}">
+        <label for="day">Select Day:</label>
+        <select name="day" id="day" onchange="this.form.submit()">
+            <option value="">All Days</option>
+            <option value="Monday" {% if selected_day == 'Monday' %}selected{% endif %}>Monday</option>
+            <option value="Tuesday" {% if selected_day == 'Tuesday' %}selected{% endif %}>Tuesday</option>
+            <option value="Wednesday" {% if selected_day == 'Wednesday' %}selected{% endif %}>Wednesday</option>
+            <option value="Thursday" {% if selected_day == 'Thursday' %}selected{% endif %}>Thursday</option>
+            <option value="Friday" {% if selected_day == 'Friday' %}selected{% endif %}>Friday</option>
+            <option value="Saturday" {% if selected_day == 'Saturday' %}selected{% endif %}>Saturday</option>
+            <option value="Sunday" {% if selected_day == 'Sunday' %}selected{% endif %}>Sunday</option>
+        </select>
+    </form>
+    <br><br>
+    <h2>Breakfast Items</h2>
+    <table border="1" class="table table-striped">
+        <tr style="background-color: #001f3f; color: #ffffff;">
+            <td>Sl.no</td>
+            <td>Menu Item</td>
+            <td>Action</td>
+        </tr>
+        {% for item in breakfast_items %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ item.menu_item }}</td>
+            <td>
+                <a href="{% url 'bb' item.menu_id %}/#dd" class="btn btn-danger" >Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3">No breakfast items for {{ selected_day }}.</td>
+        </tr>
+        {% endfor %}
+    </table>
+<br>
+    <h2>Lunch Items</h2>
+    <table border="1" class="table table-striped">
+        <tr style="background-color: #001f3f; color: #ffffff;">
+            <td>Sl.no</td>
+            <td>Menu Item</td>
+            <td>Action</td>
+        </tr>
+        {% for item in lunch_items %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ item.menu_item }}</td>
+            <td>
+                <a href="{% url 'bb' item.menu_id %}/#dd" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3">No lunch items for {{ selected_day }}.</td>
+        </tr>
+        {% endfor %}
+    </table>
+<br>
+<h2>Tea Snack Items</h2>
+<table border="1" class="table table-striped">
+    <tr style="background-color: #001f3f; color: #ffffff;">
+        <td>Sl.no</td>
+        <td>Menu Item</td>
+        <td>Action</td>
+    </tr>
+    {% for item in tea_snack_items %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ item.menu_item }}</td> <!-- Fixed closing tag -->
+        <td>
+            <a href="{% url 'bb' item.menu_id %}/#dd" class="btn btn-danger">Delete</a>
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="3">No tea snack items for {{ selected_day }}.</td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+<br>
+    <h2>Dinner Items</h2>
+    <table border="1" class="table table-striped">
+        <tr style="background-color: #001f3f; color: #ffffff;">
+            <td>Sl.no</td>
+            <td>Menu Item</td>
+            <td>Action</td>
+        </tr>
+        {% for item in dinner_items %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ item.menu_item }}</td>
+            <td>
+                <a href="{% url 'bb' item.menu_id %}/#dd" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3">No dinner items for {{ selected_day }}.</td>
+        </tr>
+        {% endfor %}
+    </table>
+<br>
+    <h2>Special Items</h2>
+    <table border="1" class="table table-striped">
+        <tr style="background-color: #001f3f; color: #ffffff;">
+            <td>Sl.no</td>
+            <td>Menu Item</td>
+            <td>Price</td>
+            <td>Action</td>
+        </tr>
+        {% for item in special_items %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ item.menu_item }}</td>
+            <td>{{ item.price }}</td>
+            <td>
+                <a href="{% url 'bb' item.menu_id %}/#dd" class="btn btn-danger">Delete</a>
+                <a href="{% url 'aa' item.menu_id %}/#dd" class="btn btn-primary">Update</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">No special items for {{ selected_day }}.</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</body>
+</html>
+{% endblock %}
+
+
+{% comment %} {% extends 'Temp/admin.html' %}
+{% block base %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Manage Menu Items</title>
+</head>
+<body>
+    <h1>Manage Menu Items</h1>
+
+    <h2>Breakfast Items</h2>
+    <table border="1" class="table table-striped">
+        <tr>
+            <th>Sl.no</th>
+            <th>Menu Item</th>
+            <th>Action</th>
+        </tr>
+        {% for item in breakfast_items %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ item.menu_item }}</td>
+            <td>
+                <a href="{% url 'bb' item.menu_id %}/#dd" class="btn btn-outline-dark">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Lunch Items</h2>
+    <table border="1" class="table table-striped">
+        <tr>
+            <th>Sl.no</th>
+            <th>Menu Item</th>
+            <th>Action</th>
+        </tr>
+        {% for item in lunch_items %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ item.menu_item }}</td>
+            <td>
+                <a href="{% url 'bb' item.menu_id %}/#dd" class="btn btn-outline-dark">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Tea Snack Items</h2>
+    <table border="1" class="table table-striped">
+        <tr>
+            <th>Sl.no</th>
+            <th>Menu Item</th>
+            <th>Action</th>
+        </tr>
+        {% for item in tea_snack_items %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ item.menu_item }}</td>
+            <td>
+                <a href="{% url 'bb' item.menu_id %}/#dd" class="btn btn-outline-dark">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Dinner Items</h2>
+    <table border="1" class="table table-striped">
+        <tr>
+            <th>Sl.no</th>
+            <th>Menu Item</th>
+            <th>Action</th>
+        </tr>
+        {% for item in dinner_items %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ item.menu_item }}</td>
+            <td>
+                <a href="{% url 'bb' item.menu_id %}/#dd" class="btn btn-outline-dark">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Special Items</h2>
+    <table border="1" class="table table-striped">
+        <tr>
+            <th>Sl.no</th>
+            <th>Menu Item</th>
+            <th>Price</th>
+            <th>Action</th>
+        </tr>
+        {% for item in special_items %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ item.menu_item }}</td>
+            <td>{{ item.price }}</td> <!-- Display the price -->
+            <td>
+                <a href="{% url 'bb' item.menu_id %}/#dd" class="btn btn-outline-dark">Delete</a>
+                <a href="{% url 'aa' item.menu_id %}/#dd" class="btn btn-outline-dark">Update</a> <!-- Add Update button -->
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</body>
+</html>
+{% endblock %}
+
+
+
+{% comment %} {% extends 'Temp/admin.html' %}
+
+{% block base %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Manage Menu</title>
+    <style>
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* 5 equal columns */
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .grid-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <center><h1>Manage Menu</h1><br></center>
+
+    <h2>Breakfast</h2>
+    <div class="grid-container">
+        {% for item in breakfast_items %}
+            <div class="grid-item">
+                <div>{{ item.menu_item }}</div>
+                <form method="POST" action="{% url 'delete' item.id %}">
+                    {% csrf_token %}
+                    <button class="btn btn-danger" type="submit">Delete</button>
+                </form>
+            </div>
+        {% empty %}
+            <div class="grid-item">No breakfast items added.</div>
+        {% endfor %}
+    </div>
+
+    <h2>Lunch</h2>
+    <div class="grid-container">
+        {% for item in lunch_items %}
+            <div class="grid-item">
+                <div>{{ item.menu_item }}</div>
+                <form method="POST" action="{% url 'delete' item.id %}">
+                    {% csrf_token %}
+                    <button class="btn btn-danger" type="submit">Delete</button>
+                </form>
+            </div>
+        {% empty %}
+            <div class="grid-item">No lunch items added.</div>
+        {% endfor %}
+    </div>
+
+    <h2>Tea Snacks</h2>
+    <div class="grid-container">
+        {% for item in tea_snack_items %}
+            <div class="grid-item">
+                <div>{{ item.menu_item }}</div>
+                <form method="POST" action="{% url 'delete' item.id %}">
+                    {% csrf_token %}
+                    <button class="btn btn-danger" type="submit">Delete</button>
+                </form>
+            </div>
+        {% empty %}
+            <div class="grid-item">No tea snack items added.</div>
+        {% endfor %}
+    </div>
+
+    <h2>Dinner</h2>
+    <div class="grid-container">
+        {% for item in dinner_items %}
+            <div class="grid-item">
+                <div>{{ item.menu_item }}</div>
+                <form method="POST" action="{% url 'delete' item.id %}">
+                    {% csrf_token %}
+                    <button class="btn btn-danger" type="submit">Delete</button>
+                </form>
+            </div>
+        {% empty %}
+            <div class="grid-item">No dinner items added.</div>
+        {% endfor %}
+    </div>
+
+    <h2>Special Items</h2>
+    <div class="grid-container">
+        {% for item in special_items %}
+            <div class="grid-item">
+                <div>{{ item.menu_item }} | {{ item.price }}</div>
+                <form method="POST" action="{% url 'update_item' item.id %}">
+                    {% csrf_token %}
+                    <input type="text" name="updated_item" placeholder="Update item" required>
+                    <button class="btn btn-success" type="submit">Update</button>
+                </form>
+                <form method="POST" action="{% url 'delete' item.id %}">
+                    {% csrf_token %}
+                    <button class="btn btn-danger" type="submit">Delete</button>
+                </form>
+            </div>
+        {% empty %}
+            <div class="grid-item">No special items added.</div>
+        {% endfor %}
+    </div>
+
+</body>
+</html>
+{% endblock %}
+
+
+{% comment %} {% extends 'Temp/admin.html' %}
+{% block base %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Manage Menu</title>
+    <style>
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* 5 equal columns */
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .grid-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <center><h1>Manage Menu</h1><br></center>
+
+    <h2>Breakfast</h2>
+    <div class="grid-container">
+        {% for item in breakfast_items %}
+            <div class="grid-item">
+                <div>{{ item.menu_item }}</div>
+                <form method="POST" action="{% url 'delete_item' item.id %}">
+                    {% csrf_token %}
+                    <button class="btn btn-danger" type="submit">Delete</button>
+                </form>
+            </div>
+        {% empty %}
+            <div class="grid-item">No breakfast items added.</div>
+        {% endfor %}
+    </div>
+
+    <h2>Lunch</h2>
+    <div class="grid-container">
+        {% for item in lunch_items %}
+            <div class="grid-item">
+                <div>{{ item.menu_item }}</div>
+                <form method="POST" action="{% url 'delete_item' item.id %}">
+                    {% csrf_token %}
+                    <button class="btn btn-danger" type="submit">Delete</button>
+                </form>
+            </div>
+        {% empty %}
+            <div class="grid-item">No lunch items added.</div>
+        {% endfor %}
+    </div>
+
+    <h2>Tea Snacks</h2>
+    <div class="grid-container">
+        {% for item in tea_snack_items %}
+            <div class="grid-item">
+                <div>{{ item.menu_item }}</div>
+                <form method="POST" action="{% url 'delete_item' item.id %}">
+                    {% csrf_token %}
+                    <button class="btn btn-danger" type="submit">Delete</button>
+                </form>
+            </div>
+        {% empty %}
+            <div class="grid-item">No tea snack items added.</div>
+        {% endfor %}
+    </div>
+
+    <h2>Dinner</h2>
+    <div class="grid-container">
+        {% for item in dinner_items %}
+            <div class="grid-item">
+                <div>{{ item.menu_item }}</div>
+                <form method="POST" action="{% url 'delete_item' item.id %}">
+                    {% csrf_token %}
+                    <button class="btn btn-danger" type="submit">Delete</button>
+                </form>
+            </div>
+        {% empty %}
+            <div class="grid-item">No dinner items added.</div>
+        {% endfor %}
+    </div>
+
+    <h2>Special Items</h2>
+    <div class="grid-container">
+        {% for item in special_items %}
+            <div class="grid-item">
+                <div>{{ item.menu_item }} | {{ item.price }}</div>
+                <form method="POST" action="{% url 'update_item' item.id %}">
+                    {% csrf_token %}
+                    <input type="text" name="updated_item" placeholder="Update item" required>
+                    <button class="btn btn-success" type="submit">Update</button>
+                </form>
+                <form method="POST" action="{% url 'delete_item' item.id %}">
+                    {% csrf_token %}
+                    <button class="btn btn-danger" type="submit">Delete</button>
+                </form>
+            </div>
+        {% empty %}
+            <div class="grid-item">No special items added.</div>
+        {% endfor %}
+    </div>
+
+</body>
+</html>
+{% endblock %} {% endcomment %}  

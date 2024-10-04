@@ -1,0 +1,94 @@
+{% extends 'Temp/admin.html' %}
+{% block base %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Update Stock</title>
+    <script>
+        // Function to check if quantity is equal to or less than threshold
+        function checkThreshold() {
+            const quantity = document.getElementById("quantity").value;
+            const threshold = document.getElementById("threshold").value;
+
+            if (parseInt(quantity) <= parseInt(threshold)) {
+                alert("Warning: Quantity has reached or is below the threshold value!");
+            }
+        }
+    </script>
+</head>
+<body>
+<form method="post">
+    {% csrf_token %}
+    <center>
+        <div class="col-lg-5">
+            <div class="card-body rounded-bottom bg-dark p-5" id="add_stock">
+                <h1 style="font-family: 'Times New Roman'; color: peru" align="center">Update Stock</h1><br>
+    
+                <!-- Item Code Field -->
+                <div class="form-group">
+                    <label style="color:white">Item Code</label>
+                    <input type="text" name="item_code" id="item_code" class="form-control p-4" style="font-family: 'Times New Roman'" 
+                           placeholder="Enter Item Code (Numbers Only)" 
+                           required="required" 
+                           pattern="\d+" 
+                           title="Only integers are allowed."
+                           value="{{ stock.item_code }}"/> <!-- Corrected from dd.name to stock.item_code -->
+                </div>
+    
+                <!-- Item Name Field -->
+                <div class="form-group">
+                    <label style="color:white">Item Name</label>
+                    <input type="text" name="item_name" id="item_name" class="form-control p-4" style="font-family: 'Times New Roman'" 
+                           placeholder="Enter Item Name" 
+                           required="required" 
+                           pattern="[A-Za-z\s]+" 
+                           title="Only alphabets and spaces are allowed." 
+                           value="{{ stock.item_name }}" />  <!-- Retain value on error -->
+                </div>
+    
+                <!-- Quantity Field -->
+                <div class="form-group">
+                    <label style="color:white">Quantity</label>
+                    <input type="number" name="quantity" id="quantity" class="form-control p-4" style="font-family: 'Times New Roman'" 
+                           placeholder="Enter Quantity" 
+                           required="required"
+                           value="{{ stock.stock_quantity }}" 
+                           onchange="checkThreshold()" />
+                </div>
+    
+                <!-- Threshold Field -->
+                <div class="form-group">
+                    <label style="color:white">Threshold</label>
+                    <input type="number" name="threshold" id="threshold" class="form-control p-4" style="font-family: 'Times New Roman'" 
+                           placeholder="Enter Threshold" 
+                           required="required"
+                           value="{{ stock.threshold }}" 
+                           onchange="checkThreshold()" />
+                </div>
+    
+                <!-- Price Field -->
+                <div class="form-group">
+                    <label style="color:white">Price</label>
+                    <input type="number" name="price" id="price" class="form-control p-4" style="font-family: 'Times New Roman'" 
+                           placeholder="Enter Price" 
+                           required="required"
+                           value="{{ stock.price }}" />  <!-- Retain value on error -->
+                </div>
+    
+                <!-- Buttons: Add, Update -->
+                <div class="form-group text-center">
+                    <div class="btn-group" role="group">                
+                        <button class="btn btn-primary" type="submit" name="action" value="update" style="font-family: 'Times New Roman'">
+                            Update
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </center>
+</form>
+</body>
+</html>
+{% endblock %}

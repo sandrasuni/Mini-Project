@@ -13,7 +13,7 @@
 	<table border="1" class="table table-striped">
 		<tr>
 			<td>Sl.no</td>
-			<td>Mess_no</td>
+			{% comment %} <td>Mess_no</td> {% endcomment %}
 			<td>from_date</td>
 			<td>to_date</td>
             <td>Reason</td>
@@ -21,8 +21,8 @@
 		</tr>
         {% for i in b %}
 		<tr>
-			<td>{{ i.leave_id }}</td>
-            <td>{{ i.mess.mess_no }}</td>
+			<td>{{ forloop.counter }}</td>
+            {% comment %} <td>{{ i.mess.mess_id }}</td> {% endcomment %}
 			<td>{{ i.from_date }}</td>
 			<td>{{ i.to_date }}</td>
 			<td>{{ i.reason}}</td>

@@ -5,37 +5,48 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Update or Delete Student</title>
+    <title>Update Student</title>
+    <script>
+        function validateDate() {
+            const inputDate = document.querySelector('input[name="date"]').value;
+            const today = new Date().toISOString().split('T')[0];
+
+            const errorField = document.getElementById("dateError");
+
+            if (inputDate < today) {
+                errorField.innerHTML = "The date cannot be in the past.";
+                return false; // Prevent form submission if input date is in the past
+            } else {
+                errorField.innerHTML = ""; // Clear the error message if the date is valid
+                return true; // Allow form submission
+            }
+        }
+    </script>
 </head>
 <body>
-<form method="post">
+<form method="post" onsubmit="return validateDate()">
     {% csrf_token %}
     <center>
         <table><br><br><br>
             <div class="col-lg-5">
                 <div class="card-body rounded-bottom bg-dark p-5" id="all_registered">
-                    <h1 style="font-family: 'Times New Roman';color: peru" align="center">Update Students</h1><br>
+                    <h1 style="font-family: 'Times New Roman';color: peru" align="center">Update Student</h1><br>
 
                     <!-- Joining Date Field -->
                     <div class="form-group">
-                        <input type="date" name="date" value="{{ dt }}" class="form-control p-4" style="font-family: 'Times New Roman'" placeholder="Enter Joining Date" required="required" />
+                        <input type="date" name="date" value="{{ dd.joining_date|date:'Y-m-d' }}" class="form-control p-4" style="font-family: 'Times New Roman'" required="required" />
+                        <span id="dateError" style="color: red;"></span>
                     </div><br>
-                    
+
                     <!-- Name Field -->
                     <div class="form-group">
-                        <input type="text" name="ne" value="{{ dd.name }}" class="form-control p-4" style="font-family: 'Times New Roman'" placeholder="Enter Student Name" required="required" />
+                        <input type="text" name="ne" value="{{ dd.name }}" class="form-control p-4" style="font-family: 'Times New Roman'" required="required" />
                     </div><br>
 
                     <!-- Mess Number Field -->
                     <div class="form-group">
-                        <input type="text" name="d" value="{{ dd.department }}" class="form-control p-4" style="font-family: 'Times New Roman'" placeholder="Enter Mess Number" required="required" />
+                        <input type="text" name="d" value="{{ dd.department }}" class="form-control p-4" style="font-family: 'Times New Roman'" required="required" />
                     </div><br>
-
-                    {% comment %} <!-- Password Field -->
-                    <div class="form-group">
-                        <input type="password" name="password" class="form-control p-4" style="font-family: 'Times New Roman'" placeholder="Enter Password" />
-                        <small>Leave blank to keep the current password.</small>
-                    </div><br> {% endcomment %}
 
                     <!-- Update Button -->
                     <div>
@@ -48,4 +59,4 @@
 </form>
 </body>
 </html>
-{% endblock %} 
+{% endblock %}

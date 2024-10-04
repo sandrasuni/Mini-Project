@@ -1,0 +1,56 @@
+{% extends 'Temp/admin.html' %}
+{% block base %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Update Menu</title>
+    {% comment %} <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!-- Include Bootstrap CSS --> {% endcomment %}
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+        <center>
+            <table><br><br><br>
+                <div class="col-lg-5">
+                    <div class="card-body rounded-bottom bg-dark p-5" id="all_registered">
+                        <h1 style="font-family: 'Times New Roman';color: peru" align="center">Update Special Menu</h1><br>
+                        
+                        <div class="form-group">
+                            <label for="item_name" style="color: white;">Menu Item:</label>
+                            <input type="text" name="item_name" value="{{ item.menu_item }}" class="form-control p-4" style="font-family: 'Times New Roman'" placeholder="Update special menu" pattern="[A-Za-z\s]+" title="Only alphabets and spaces are allowed." required="required" />
+                        </div><br>
+
+                        <!-- Menu Item Field -->
+                        {% comment %} <div class="form-group">
+                            <label for="item_name">Menu Item:</label>
+                            <input type="text" id="item_name" name="item_name" value="{{ item.menu_item }}" class="form-control mt-2" placeholder="Update special menu" required>
+                        </div> {% endcomment %}
+
+                        <div class="form-group">
+                            <label for="price" style="color: white;">Price:</label>
+                            {% comment %} <input type="text" name="price" value="{{ item.price }}" class="form-control p-4" style="font-family: 'Times New Roman'" placeholder="Price" required="required" /> {% endcomment %}
+                            <input type="text" name="price" value="{{ item.price }}" class="form-control mb-2" style="font-family: 'Times New Roman'" placeholder="Price" pattern="\d+"  
+                            title="Enter a valid price. Only whole numbers are allowed."  />
+                        </div><br>
+
+
+                        <!-- Price Field -->
+                        {% comment %} <div class="form-group">
+                            <label for="price">Price:</label>
+                            <input type="number" id="price" name="price" value="{{ item.price }}" class="form-control mt-2" placeholder="Price" min="0" required>
+                        </div> {% endcomment %}
+
+                        <!-- Update Button -->
+                        <div>
+                            <button class="btn btn-primary btn-block p-3" style="font-family: 'Times New Roman'" type="submit">Update Special Menu</button>
+                        </div>
+                    </div>
+                </div>
+            </table>
+        </center>
+    </form>
+    </body>
+    </html>
+    {% endblock %}

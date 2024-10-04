@@ -1,0 +1,293 @@
+{% extends 'Temp/admin.html' %}
+{% block base %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Menu</title>
+    <style>
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* 5 equal columns */
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .grid-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <form method="POST" action="{% url 'menu' %}/#dd">
+        {% csrf_token %}
+        <center><h1>MENU</h1><br></center>
+    
+        <label for="day">Select Day:</label>
+        <select name="day" class="form-control mb-3" required>
+            <option value="">Select Day</option>
+            <option value="monday" {% if selected_day == 'monday' %}selected{% endif %}>Monday</option>
+            <option value="tuesday" {% if selected_day == 'tuesday' %}selected{% endif %}>Tuesday</option>
+            <option value="wednesday" {% if selected_day == 'wednesday' %}selected{% endif %}>Wednesday</option>
+            <option value="thursday" {% if selected_day == 'thursday' %}selected{% endif %}>Thursday</option>
+            <option value="friday" {% if selected_day == 'friday' %}selected{% endif %}>Friday</option>
+            <option value="saturday" {% if selected_day == 'saturday' %}selected{% endif %}>Saturday</option>
+            <option value="sunday" {% if selected_day == 'sunday' %}selected{% endif %}>Sunday</option>
+        </select>
+
+        <!-- Input Fields for Menu Items -->
+        <div class="card mb-3">
+            <div class="card-header bg-dark text-white">Breakfast</div>
+            <div class="card-body">
+                <input type="text" name="breakfast_items" class="form-control mb-2" placeholder="Add breakfast item"
+                 pattern="[A-Za-z\s]+" title="Only alphabets and spaces are allowed." />
+                <button class="btn btn-primary mt-2" type="submit">Add Breakfast</button>
+            </div>
+        </div>
+        
+        <div class="card mb-3">
+            <div class="card-header bg-dark text-white">Lunch</div>
+            <div class="card-body">
+                <input type="text" name="lunch_items" class="form-control mb-2" placeholder="Add Lunch item"
+                pattern="[A-Za-z\s]+" title="Only alphabets and spaces are allowed." />
+                <button class="btn btn-primary mt-2" type="submit">Add Lunch</button>
+            </div>
+        </div>
+        
+        <div class="card mb-3">
+            <div class="card-header bg-dark text-white">Tea Snack</div>
+            <div class="card-body">
+                <input type="text" name="tea_snack_items" class="form-control mb-2" placeholder="Add Tea snack item"
+                pattern="[A-Za-z\s]+" title="Only alphabets and spaces are allowed." />
+                <button class="btn btn-primary mt-2" type="submit">Add Tea Snack</button>
+            </div>
+        </div>
+        
+        <div class="card mb-3">
+            <div class="card-header bg-dark text-white">Dinner</div>
+            <div class="card-body">
+                <input type="text" name="dinner_items" class="form-control mb-2" placeholder="Add Dinner item"
+                pattern="[A-Za-z\s]+" title="Only alphabets and spaces are allowed." />
+                <button class="btn btn-primary mt-2" type="submit">Add Dinner</button>
+            </div>
+        </div>
+        
+        <div class="card mb-3">
+            <div class="card-header bg-dark text-white">Special Item</div>
+            <div class="card-body">
+                <input type="text" name="special_item_name" class="form-control mb-2" placeholder="Add Special item"
+                pattern="[A-Za-z\s]+" title="Only alphabets and spaces are allowed." />
+                <input type="number" name="price" class="form-control mb-2" placeholder="Add Price" min="0" title="Enter a valid price. Only whole numbers are allowed." />
+                <button class="btn btn-primary mt-2" type="submit">Add Special Item</button>
+            </div>
+        </div>        
+
+        <!-- Show success message if it exists -->
+        {% if messages %}
+            {% for message in messages %}
+                <script>alert("{{ message }}");</script>
+            {% endfor %}
+        {% endif %}
+    </form>
+    
+    <h1>Added Menu</h1>
+    <form method="GET" action="{% url 'menu' %}/#dd">
+        <label for="filter_day">Filter Menu by Day:</label>
+        <select name="day" class="form-control mb-3" onchange="this.form.submit()">
+            <option value="">All Days</option>
+            <option value="monday" {% if selected_day == 'monday' %}selected{% endif %}>Monday</option>
+            <option value="tuesday" {% if selected_day == 'tuesday' %}selected{% endif %}>Tuesday</option>
+            <option value="wednesday" {% if selected_day == 'wednesday' %}selected{% endif %}>Wednesday</option>
+            <option value="thursday" {% if selected_day == 'thursday' %}selected{% endif %}>Thursday</option>
+            <option value="friday" {% if selected_day == 'friday' %}selected{% endif %}>Friday</option>
+            <option value="saturday" {% if selected_day == 'saturday' %}selected{% endif %}>Saturday</option>
+            <option value="sunday" {% if selected_day == 'sunday' %}selected{% endif %}>Sunday</option>
+        </select>
+    </form>
+    
+    <div class="grid-container">
+        <div class="grid-item"><strong>Breakfast</strong></div>
+        <div class="grid-item"><strong>Lunch</strong></div>
+        <div class="grid-item"><strong>Tea Snacks</strong></div>
+        <div class="grid-item"><strong>Dinner</strong></div>
+        <div class="grid-item"><strong>Special Items</strong></div>
+    
+        <!-- Display Breakfast Items -->
+        <div class="grid-item">
+            {% for item in breakfast_items %}
+                <div>{{ item.menu_item }}</div>
+            {% empty %}
+                <div>No breakfast items added.</div>
+            {% endfor %}
+        </div>
+    
+        <!-- Display Lunch Items -->
+        <div class="grid-item">
+            {% for item in lunch_items %}
+                <div>{{ item.menu_item }}</div>
+            {% empty %}
+                <div>No lunch items added.</div>
+            {% endfor %}
+        </div>
+    
+        <!-- Display Tea Snack Items -->
+        <div class="grid-item">
+            {% for item in tea_snack_items %}
+                <div>{{ item.menu_item }}</div>
+            {% empty %}
+                <div>No tea snack items added.</div>
+            {% endfor %}
+        </div>
+    
+        <!-- Display Dinner Items -->
+        <div class="grid-item">
+            {% for item in dinner_items %}
+                <div>{{ item.menu_item }}</div>
+            {% empty %}
+                <div>No dinner items added.</div>
+            {% endfor %}
+        </div>
+    
+        <!-- Display Special Items in Two Columns -->
+        <div class="grid-item">
+            <strong>Special Item</strong> | <strong>Price</strong>
+            <hr>
+            {% for item in special_items %}
+                <div>{{ item.menu_item }} | {{ item.price }}</div>
+            {% empty %}
+                <div>No special items added.</div>
+            {% endfor %}
+        </div>
+    </div>
+    
+
+    </div>
+</body>
+</html>
+{% endblock %}
+
+
+{% comment %} {% extends 'Temp/admin.html' %}
+{% block base %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Menu</title>
+</head>
+<body>
+    <form method="POST" action="{% url 'menu' %}">
+        {% csrf_token %}
+        <center><h1>MENU</h1><br></center>
+    
+        <label for="day">Select Day:</label>
+        <select name="day" class="form-control mb-3" required>
+            <option value="">Select Day</option>
+            <option value="monday" {% if selected_day == 'monday' %}selected{% endif %}>Monday</option>
+            <option value="tuesday" {% if selected_day == 'tuesday' %}selected{% endif %}>Tuesday</option>
+            <option value="wednesday" {% if selected_day == 'wednesday' %}selected{% endif %}>Wednesday</option>
+            <option value="thursday" {% if selected_day == 'thursday' %}selected{% endif %}>Thursday</option>
+            <option value="friday" {% if selected_day == 'friday' %}selected{% endif %}>Friday</option>
+            <option value="saturday" {% if selected_day == 'saturday' %}selected{% endif %}>Saturday</option>
+            <option value="sunday" {% if selected_day == 'sunday' %}selected{% endif %}>Sunday</option>
+        </select>
+
+        <!-- Input Fields for Menu Items -->
+        <div class="card mb-3">
+            <div class="card-header bg-dark text-white">Breakfast</div>
+            <div class="card-body">
+                <input type="text" name="breakfast_items" class="form-control mb-2" placeholder="Add breakfast item">
+                <button class="btn btn-primary mt-2" type="submit">Add Breakfast</button>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header bg-dark text-white">Lunch</div>
+            <div class="card-body">
+                <input type="text" name="lunch_items" class="form-control mb-2" placeholder="Add Lunch item">
+                <button class="btn btn-primary mt-2" type="submit">Add Lunch</button>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header bg-dark text-white">Tea Snack</div>
+            <div class="card-body">
+                <input type="text" name="tea_snack_items" class="form-control mb-2" placeholder="Add Tea snack item">
+                <button class="btn btn-primary mt-2" type="submit">Add Tea Snack</button>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header bg-dark text-white">Dinner</div>
+            <div class="card-body">
+                <input type="text" name="dinner_items" class="form-control mb-2" placeholder="Add Dinner item">
+                <button class="btn btn-primary mt-2" type="submit">Add Dinner</button>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header bg-dark text-white">Special Item</div>
+            <div class="card-body">
+                <input type="text" name="special_item_name" class="form-control mb-2" placeholder="Add Special item">
+                <input type="text" name="price" class="form-control mb-2" placeholder="Add Price">
+                <button class="btn btn-primary mt-2" type="submit">Add Special Item</button>
+            </div>
+        </div>
+
+        <!-- Show success message if it exists -->
+        {% if messages %}
+            {% for message in messages %}
+                <script>alert("{{ message }}");</script>
+            {% endfor %}
+        {% endif %}
+    </form>
+    <br><br>
+    <h1>Added Menu</h1>
+    <form method="GET" action="{% url 'menu' %}">
+        <label for="filter_day">Filter Menu by Day:</label>
+        <select name="day" class="form-control mb-3" onchange="this.form.submit()">
+            <option value="">All Days</option>
+            <option value="monday" {% if selected_day == 'monday' %}selected{% endif %}>Monday</option>
+            <option value="tuesday" {% if selected_day == 'tuesday' %}selected{% endif %}>Tuesday</option>
+            <option value="wednesday" {% if selected_day == 'wednesday' %}selected{% endif %}>Wednesday</option>
+            <option value="thursday" {% if selected_day == 'thursday' %}selected{% endif %}>Thursday</option>
+            <option value="friday" {% if selected_day == 'friday' %}selected{% endif %}>Friday</option>
+            <option value="saturday" {% if selected_day == 'saturday' %}selected{% endif %}>Saturday</option>
+            <option value="sunday" {% if selected_day == 'sunday' %}selected{% endif %}>Sunday</option>
+        </select>
+    </form>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Day</th>
+                <th>Menu Item</th>
+                <th>Menu Type</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if menu_items %}
+                {% for item in menu_items %}
+                    <tr>
+                        <td>{{ item.day }}</td>
+                        <td>{{ item.menu_item }}</td>
+                        <td>{{ item.menu_type }}</td>
+                        <td>{{ item.price }}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="4">No menu items added yet for this day.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+        
+</body>
+</html>
+{% endblock %} {% endcomment %}

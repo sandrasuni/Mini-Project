@@ -30,7 +30,18 @@
 
     <!-- Template Stylesheet -->
     <link href="/static/css/style.css" rel="stylesheet">
+    <style>
+       
 
+        .sidebar a {
+            color: white; /* White text for links */
+            text-decoration: none; /* Remove underline */
+            display: block; /* Display links as block elements */
+            padding: 10px; /* Padding for links */
+            margin-bottom: 10px; /* Space between links */
+            transition: background-color 0.3s; /* Smooth background transition */
+        }
+</style>
 </head>
 
 <body>
@@ -51,7 +62,7 @@
                     <a href="" class="navbar-brand p-0">
                         <h2 class="text-primary m-0"  style="font-size: 25px;"><i class="fa fa-utensils me-3"></i>CHAITHRAM CATERS</h2>
                         {% comment %} <h2 class="text-primary m-0"><i class=""></i> <p style="font-size:24px"><span class="text-white">CATERS</span></p></h2> {% endcomment %}
-                        <img src="/static/img/logo.png" alt="">
+                        {% comment %} <img src="/static/img/logo.png" alt=""> {% endcomment %}
                     </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                         <span class="fa fa-bars"></span>   
@@ -68,9 +79,29 @@
                                     <li><a class="dropdown-item" href="/student/ms/#dd"><i class="fas fa-user" style="margin-right: 10px;"></i>All Registration</a></li>
                                 </ul>
                             </div>
-                            <a class="nav-link" href="#">Stock Management</a>
-                            <a class="nav-link" href="#">Presence Log</a>
-                            <a class="nav-link" href="#">Menu Management</a>
+                            {% comment %} <a class="nav-link" href="/stock/stock/#dd">Stock Management</a> {% endcomment %}
+                            <div class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Stock Management
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="/stock/stock/#dd"><i class="fas fa-user-plus" style="margin-right: 10px;"></i>Add Stock</a></li>
+                                    <li><a class="dropdown-item" href="/stock/mansto/#dd"><i class="fas fa-user" style="margin-right: 10px;"></i>Manage stock</a></li>
+                                    <li><a class="dropdown-item" href=""><i class="fas fa-user" style="margin-right: 10px;"></i>Purchase list</a></li>
+                                </ul>
+                            </div>
+                            <a class="nav-link" href="/presence_log/presence_log/#dd">Presence Log</a>
+                            <div class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Menu Management
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="{% url 'menu' %}#dd"><i class="fas fa-plus-circle" style="margin-right: 10px;"></i>Add Menu
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="{% url 'manage' %}#dd"><i class="fas fa-edit" style="margin-right: 10px;"></i>Manage Menu
+                                    </a></li>
+                                    
+                                </ul>
+                            </div>
+                            {% comment %} <a class="nav-link" href="/menu_item/menu/#dd">Menu Management</a> {% endcomment %}
                             <a class="nav-link" href="/mess_amount/messamount/#dd">Mess amount</a>
                             <a class="nav-link" href="/Temp/home/">Logout</a>
                         </div>
@@ -80,15 +111,15 @@
         
             <div class="container-xxl py-5" >
                 <div class="row" >
-                    <div class="col-md-3 sidebar" style="color:black">
-                        <nav class="sidebar"  style="margin-top: 20px;" >
+                    <div class="col-md-3 sidebar">
+                    <nav class="sidebar" style="margin-top: 20px;">
                             <ul><br><br>
-                            {% comment %} <li><a href="/billing/billing/#dd">View Student</a></li><br> {% endcomment %}
+                            <li><a href="/billing/vstubill/#dd">View Student</a></li><br>
                             <li><a href="">View Stock</a></li><br>
-                            <li><a href="">Day Student</a></li><br>
+                            <li><a href="/leave_request/ds/#dd">Day Student</a></li><br>
                             <li><a href="">Extra Order</a></li><br>
                             <li><a href="/leave_request/ml/#dd">Student Leave</a></li><br>
-                            <li><a href="/billing/billing/">Bill</a></li><br>
+                            <li><a href="/billing/billing/#dd">Bill</a></li><br>
                             <li><a href="">Report</a></li>
                             </ul>
                         </nav>
@@ -107,7 +138,7 @@
                         </div>
                         <div class="col-lg-6 text-center text-lg-end overflow-hidden">
                             {% comment %} <img class="img-fluid" src="/static/img/biriyani.webp" alt="Image"> {% endcomment %}
-                            <img class="img-fluid" src="/static/img/biriyani.webp" alt="Image" style="max-width: auto; height: auto;">
+                            <img class="img-fluid" src="/static/img/biriyani.webp" alt="Image" style="max-width: auto; height: auto; animation: none;">
                         </div>
                     </div>
                 </div>
