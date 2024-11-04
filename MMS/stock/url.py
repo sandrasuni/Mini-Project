@@ -5,5 +5,6 @@ urlpatterns = [
     url('stock/', views.stock),
     url('mansto/',views.mansto),
     url('update/(?P<stock_id>\w+)',views.update_stock,name='su'),
-    url('delete/(?P<idd>\w+)',views.delete,name='sd'),
+    url('delete/(?P<stock_id>\w+)',views.delete,name='sd'),
+    url('purchase_list/',views.purchase_list)
 ]

@@ -1,0 +1,47 @@
+{% extends 'Temp/admin.html' %}
+
+{% block base %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase List</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4" style="font-family: 'Times New Roman'; color: peru">Products to Purchase</h2>
+
+        <!-- Purchase List Table -->
+        <div class="card p-4 bg-light rounded">
+            <table class="table table-hover table-bordered text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Sl.no</th>
+                        <th>Item Code</th>
+                        <th>Item Name</th>
+                        <th>Current Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if purchase_list %}
+                        {% for item in purchase_list %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{ item.item_code }}</td>
+                            <td>{{ item.item_name }}</td>
+                            <td>{{ item.stock_quantity }}</td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="2">No items to purchase!</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
+{% endblock %}

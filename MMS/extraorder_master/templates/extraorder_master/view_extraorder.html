@@ -1,0 +1,86 @@
+{% extends 'Temp/admin.html' %}
+{% block base %}
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>View Extra Orders</title>
+    <style>
+        .table {
+            width: 100%;
+            margin-top: 30px;
+            background-color: transparent;
+            color: white;
+        }
+        .table th, .table td {
+            padding: 1rem;
+            vertical-align: top;
+        }
+        .table-dark {
+            background-color: #343a40;
+        }
+        .search-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .search-container input[type="text"] {
+            padding: 0.5rem;
+            margin-right: 0.5rem;
+        }
+        .search-container button {
+            padding: 0.5rem 1rem;
+        }
+        .total-row {
+            font-weight: bold;
+            background-color: #495057;  /* Darker background for total row */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="font-family: 'Times New Roman'; color: peru;" class="text-center">View Extra Orders for {{ current_month }}/{{ current_year }}</h1><br>
+
+        <!-- Search Form -->
+        <div class="search-container">
+            <form method="GET" action="{% url 'view_extra_orders' %}#dd">
+                <input type="text" name="mess_id" placeholder="Mess ID" value="{{ mess_id }}" />
+                <button type="submit">Search</button>
+            </form>
+        </div>
+
+        <table class="table table-dark table-bordered">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Mess ID</th>
+                    <th>Daily Mess Amount</th>
+                    <th>Extra Amount</th>
+                    <th>Total Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for date in month_dates %}
+                    <tr>
+                        <td>{{ date }}</td>
+                        <td>{{ mess_id }}</td>
+                        <td>{{ daily_amounts|get_item:date|default:0 }}</td> <!-- Updated to use daily_amounts -->
+                        <td>{{ extra_amounts|get_item:date|default:0 }}</td>
+                        <td>{{ total_prices|get_item:date|default:0 }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center">No extra orders found for this month</td>
+                    </tr>
+                {% endfor %}
+                <tr class="total-row">
+                    <td colspan="4" class="text-right"><strong>Total Amount to Pay for the Month:</strong></td>
+                    <td><strong>{{ final_total_amount }}</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+{% endblock %}

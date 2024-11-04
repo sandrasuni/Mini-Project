@@ -6,164 +6,178 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Add Stock</title>
-        <style>
-        .table-container {
-            margin-top: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        table, th, td {
-            border: 1px solid #000;
-        }
-        th, td {
-            padding: 8px;
-            text-align: center;
-        }
-        .action-btns a {
-            margin: 0 5px;
-        }
-
+    <style>
         /* Form Container Style */
-        form {
-            margin: 20px 0;
+        .form-container {
+            margin-top: 30px;
             font-family: Arial, sans-serif;
         }
-    
-        /* Label Style */
+
         label {
             font-size: 16px;
             margin-right: 10px;
             color: #333;
             font-weight: bold;
         }
-    
-       
-        /* Add Some Margin Below the Form */
+
         form {
             margin-bottom: 30px;
+        }
+
+        /* Table Style */
+        .table-container {
+            margin-top: 40px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid #000;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+
+        .action-btns a {
+            margin: 0 5px;
         }
     </style>
 </head>
 <body>
-<form method="post">
-    {% csrf_token %}
     <center>
-        <table><br><br><br>
-            <div class="col-lg-5">
-                <div class="card-body rounded-bottom bg-dark p-5" id="add_stock">
-                    <h1 style="font-family: 'Times New Roman'; color: peru" align="center">Add Stock</h1><br>
+        <div class="form-container">
+            <form method="post">
+                {% csrf_token %}
+                <div class="col-lg-5">
+                    <div class="card-body rounded-bottom bg-dark p-5">
+                        <h1 style="font-family: 'Times New Roman'; color: peru;" align="center">Add Stock</h1><br>
 
-                    <!-- Item Code Field -->
-                    <div class="form-group">
-                        <label style="color:white">Item Code</label>
-                        <input type="text" name="item_code" id="item_code" class="form-control p-4" style="font-family: 'Times New Roman'" 
-                               placeholder="Enter Item Code (Numbers Only)" 
-                               required="required" 
-                               pattern="\d+" 
-                               title="Only integers are allowed."
-                               value="{% if item_code_error %}{{ request.POST.item_code }}{% endif %}" />  <!-- Retain value on error -->
-                        {% if item_code_error %}
-                            <div style="color: red;">{{ item_code_error }}</div>  <!-- Error message for duplicate -->
-                        {% endif %}
-                    </div><br>
+                        <!-- Item Code Field -->
+                        <div class="form-group">
+                            <label style="color:white">Item Code</label>
+                            <input type="text" name="item_code" id="item_code" class="form-control p-4" 
+                                   style="font-family: 'Times New Roman'" 
+                                   placeholder="Enter Item Code (Numbers Only)" 
+                                   required="required" 
+                                   pattern="\d+" 
+                                   title="Only integers are allowed." 
+                                   value="{% if item_code_error or threshold_error %}{{ request.POST.item_code }}{% endif %}" />
+                            {% if item_code_error %}
+                                <div style="color: red;">{{ item_code_error }}</div>  <!-- Error for duplicate -->
+                            {% endif %}
+                        </div><br>
 
-                    <!-- Item Name Field -->
-                    <div class="form-group">
-                        <label style="color:white">Item Name</label>
-                        <input type="text" name="item_name" id="item_name" class="form-control p-4" style="font-family: 'Times New Roman'" 
-                               placeholder="Enter Item Name" 
-                               required="required" 
-                               pattern="[A-Za-z\s]+" 
-                               title="Only alphabets and spaces are allowed." 
-                               value="{% if item_code_error %}{{ request.POST.item_name }}{% endif %}" />  <!-- Retain value on error -->
-                    </div><br>
+                        <!-- Item Name Field -->
+                        <div class="form-group">
+                            <label style="color:white">Item Name</label>
+                            <input type="text" name="item_name" id="item_name" class="form-control p-4" 
+                                   style="font-family: 'Times New Roman'" 
+                                   placeholder="Enter Item Name" 
+                                   required="required" 
+                                   pattern="[A-Za-z\s]+" 
+                                   title="Only alphabets and spaces are allowed." 
+                                   value="{% if item_code_error or threshold_error %}{{ request.POST.item_name }}{% endif %}" />
+                        </div><br>
 
-                    <!-- Quantity Field -->
-                    <div class="form-group">
-                        <label style="color:white">Quantity</label>
-                        <input type="number" name="quantity" id="quantity" class="form-control p-4" style="font-family: 'Times New Roman'" 
-                               placeholder="Enter Quantity" 
-                               required="required"
-                               min="1"
-                               value="{% if item_code_error %}{{ request.POST.quantity }}{% endif %}" />
-                    </div><br>
+                        <!-- Quantity Field -->
+                        <div class="form-group">
+                            <label style="color:white">Quantity</label>
+                            <input type="number" name="stock_quantity" id="quantity" class="form-control p-4" 
+                                   style="font-family: 'Times New Roman'" 
+                                   placeholder="Enter Quantity" 
+                                   required="required"
+                                   min="1"
+                                   value="{% if item_code_error or threshold_error %}{{ request.POST.stock_quantity }}{% endif %}" />
+                        </div><br>
 
-                    <!-- Threshold Field -->
-                    <div class="form-group">
-                        <label style="color:white">Threshold</label>
-                        <input type="number" name="threshold" id="threshold" class="form-control p-4" style="font-family: 'Times New Roman'" 
-                               placeholder="Enter Threshold" 
-                               required="required"
-                               min="1"
-                               value="{% if item_code_error %}{{ request.POST.threshold }}{% endif %}"/>
-                    </div><br>
+                        <!-- Threshold Field -->
+                        <div class="form-group">
+                            <label style="color:white">Threshold</label>
+                            <input type="number" name="threshold" id="threshold" class="form-control p-4" 
+                                   style="font-family: 'Times New Roman'" 
+                                   placeholder="Enter Threshold" 
+                                   required="required"
+                                   min="1"
+                                   value="{% if item_code_error or threshold_error %}{{ request.POST.threshold }}{% endif %}"/>
+                            {% if threshold_error %}
+                                <div style="color: red;">{{ threshold_error }}</div>  <!-- Error message for threshold validation -->
+                            {% endif %}
+                        </div><br>
 
-                    <!-- Price Field -->
-                    <div class="form-group">
-                        <label style="color:white">Price</label>
-                        <input type="number" name="price" id="price" class="form-control p-4" style="font-family: 'Times New Roman'" 
-                               placeholder="Enter Price" 
-                               required="required"
-                               value="{% if item_code_error %}{{ request.POST.price }}{% endif %}" />
-                    </div><br>
+                        <!-- Price Field -->
+                        <div class="form-group">
+                            <label style="color:white">Price</label>
+                            <input type="number" name="price" id="price" class="form-control p-4" 
+                                   style="font-family: 'Times New Roman'" 
+                                   placeholder="Enter Price" 
+                                   required="required"
+                                   min="1"
+                                   value="{% if item_code_error or threshold_error %}{{ request.POST.price }}{% endif %}" />
+                        </div><br>
 
-                    <!-- Buttons: Add, Update -->
-                    <div class="form-group text-center">
-                        <div class="btn-group" role="group">
-                            <!-- Add Button -->
-                            <button class="btn btn-success" type="submit" name="action" value="add" style="font-family: 'Times New Roman'">
-                                Add Stock
-                            </button>
+                        <!-- Buttons: Add, Update -->
+                        <div class="form-group text-center">
+                            <div class="btn-group" role="group">
+                                <!-- Add Button -->
+                                <button class="btn btn-success" type="submit" name="action" value="add" style="font-family: 'Times New Roman'">
+                                    Add Stock
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    
-                </div>
-            </div>
-        </table>
-    </center>
-    {% if msg != '' %}
-    <script>
-        alert("{{ msg }}");
-    </script>
-{% endif %}
-</form>
 
-<!-- Display Existing Stock Below the Form -->
- <br><br><br>
-<center>
-    <h2 style="font-family: 'Times New Roman'; color: black;">Current Stock</h2>
-    <table border="1" class="table table-striped">
-        <thead style="background-color: #001f3f; color: #ffffff;">
-            <tr>
-                <th>Item Code</th>
-                <th>Item Name</th>
-                <th>Quantity</th>
-                <th>Threshold</th>
-                <th>Price</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for stock in stocks %}
-            <tr>
-                <td>{{ stock.item_code }}</td>
-                <td>{{ stock.item_name }}</td>
-                <td>{{ stock.stock_quantity }}</td>
-                <td>{{ stock.threshold }}</td>
-                <td>{{ stock.price }}</td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="5" class="text-center">No stock added yet.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</center>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Display Alert if message is available -->
+        {% if msg != '' %}
+            <script>
+                alert("{{ msg }}");
+            </script>
+        {% endif %}
+
+        <!-- Display Existing Stock -->
+        <div class="table-container">
+            <h2 style="font-family: 'Times New Roman'; color: black;">Current Stock</h2>
+            <table>
+                <thead style="background-color: #001f3f; color: #ffffff;">
+                    <tr>
+                        <th>Item Code</th>
+                        <th>Item Name</th>
+                        <th>Quantity</th>
+                        <th>Threshold</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stock in stocks %}
+                    <tr>
+                        <td>{{ stock.item_code }}</td>
+                        <td>{{ stock.item_name }}</td>
+                        <td>{{ stock.stock_quantity }}</td>
+                        <td>{{ stock.threshold }}</td>
+                        <td>{{ stock.price }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center">No stock added yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </center>
 </body>
 </html>
 {% endblock %}
+
+
 
 
 

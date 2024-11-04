@@ -37,11 +37,26 @@ def student(request):
 
 
 def ms(request):
-    obj=Student.objects.all()
-    context={
-        'dd':obj
+    query_name = request.GET.get('student_name', '')  # Get the student name from the request
+    query_mess_no = request.GET.get('mess_no', '')    # Get the mess number from the request
+    
+    # Filter students based on the search inputs
+    students = Student.objects.all()
+    
+    if query_name:
+        students = students.filter(name__icontains=query_name)  # Case-insensitive name filter
+
+    if query_mess_no:
+        students = students.filter(mess_id__icontains=query_mess_no)  # Case-insensitive mess_id filter
+    
+    total_students = Student.objects.count()  # Get the total count of all registered students
+
+    context = {
+        'dd': students,           # Passing filtered or all student data
+        'total_students': total_students,  # Total count of students
     }
-    return render(request,'student/manage student.html',context)
+    return render(request, 'student/manage student.html', context)
+
 
 from django.shortcuts import render, redirect
 from django.utils import timezone

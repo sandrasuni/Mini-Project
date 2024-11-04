@@ -11,7 +11,7 @@
 <center><br><br><br>
 <h1>Leave details</h1><br>
 	<table border="1" class="table table-striped">
-		<tr>
+		<tr style="background-color: #001f3f; color: #ffffff;">
 			<td>Sl.no</td>
 			<td>Mess_no</td>
 			<td>from_date</td>
@@ -21,12 +21,12 @@
 		</tr>
         {% for i in dd %}
 		<tr>
-			<td>{{ i.leave_id }}</td>
-            <td>{{ i.mess.mess_id}}</td>
-			<td>{{ i.from_date }}</td>
-			<td>{{ i.to_date }}</td>
-			<td>{{ i.reason}}</td>
-			<td>{{ i.status}}</td>
+			<td style="color: black;">{{ i.leave_id }}</td>
+            <td style="color: black;">{{ i.mess.mess_id}}</td>
+			<td style="color: black;">{{ i.from_date }}</td>
+			<td style="color: black;">{{ i.to_date }}</td>
+			<td style="color: black;">{{ i.reason}}</td>
+			<td style="color: black;">{{ i.status}}</td>
 		</tr>
         {% endfor %}
 	</table>

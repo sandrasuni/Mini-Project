@@ -11,8 +11,64 @@
     <center><br><br>
     <h1>Leave Requests</h1>
     <table border="1" class="table table-striped">
-		<tr>    
-                <td>Sl.no</td>   
+        <tr style="background-color: #001f3f; color: #ffffff;">    
+            <td>Sl.no</td>   
+            <td>Mess no</td>
+            <td>Department</td>
+            <td>From Date</td>
+            <td>To Date</td>
+            <td>Reason</td>
+            <td>Status</td>
+            <td>Actions</td>
+        </tr>
+        {% for i in dd %}
+        <tr>
+            <td style="color: black;">{{ forloop.counter }}</td>
+            <td style="color: black;">{{ i.mess.mess_id }}</td>
+            <td style="color: black;">{{ i.mess.department }}</td>
+            <td style="color: black;">{{ i.from_date }}</td>
+            <td style="color: black;">{{ i.to_date }}</td>
+            <td style="color: black;">{{ i.reason }}</td>
+            <td style="color: black;">{{ i.status }}</td>
+            <td>
+                <!-- Disable Approve button if already approved -->
+                {% if i.status == "Pending" %}
+                    <a href="{% url 'approve' idd=i.leave_id %}/#dd" class="btn btn-success">Approve</a>
+                {% else %}
+                    <button class="btn btn-success" disabled>Approved</button>
+                {% endif %}
+                
+                <!-- Disable Reject button if already rejected -->
+                {% if i.status == "Pending" %}
+                    <a href="{% url 'reject' idd=i.leave_id %}/#dd" class="btn btn-danger">Reject</a>
+                {% else %}
+                    <button class="btn btn-danger" disabled>Rejected</button>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    </center>
+</body>
+</html>
+{% endblock %}
+
+
+{% comment %} {% extends 'temp/admin.html' %}
+{% block base %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave Requests</title>
+</head>
+<body>
+    <center><br><br>
+    <h1>Leave Requests</h1>
+    <table border="1" class="table table-striped">
+		<tr style="background-color: #001f3f; color: #ffffff;">    
+                <td >Sl.no</td>   
                 <td>Mess no</td>
                 <td>Department</td>
                 <td>From Date</td>
@@ -23,23 +79,19 @@
             </tr>
             {% for i in dd %}
             <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ i.mess.mess_id }}</td>
-                <td>{{ i.mess.department }}</td>
-                <td>{{ i.from_date }}</td>
-                <td>{{ i.to_date }}</td>
-                <td>{{ i.reason }}</td>
-                <td>{{ i.status }}</td>
-                <td><a href="{% url 'approve' idd=i.leave_id %}/#dd" class="btn btn-outline-dark">Approve</a></td>
-                <td><a href="{% url 'reject' idd=i.leave_id %}/#dd" class="btn btn-outline-dark">Reject</a></td>
-                {% comment %} <td><a href="{% url 'approve_leave_request' ill=leave_id %}" class="btn btn-outline-dark">Approve</a></td>
-                <td><a href="{% url 'reject_leave_request' ill=leave_id %}" class="btn btn-outline-dark">Reject</a></td> {% endcomment %}
-                <td>
-                {% comment %} <a href="{% url 'approve_leave_request' i.leave_id %}" class="btn btn-outline-dark">Approve</a> | <a href="{% url 'reject_leave_request' i.leave_id %}" class="btn btn-outline-dark">Reject</a></td> {% endcomment %}
+                <td style="color: black;">{{ forloop.counter }}</td>
+                <td style="color: black;">{{ i.mess.mess_id }}</td>
+                <td style="color: black;">{{ i.mess.department }}</td>
+                <td style="color: black;">{{ i.from_date }}</td>
+                <td style="color: black;">{{ i.to_date }}</td>
+                <td style="color: black;">{{ i.reason }}</td>
+                <td style="color: black;">{{ i.status }}</td>
+                <td><a href="{% url 'approve' idd=i.leave_id %}/#dd" class="btn btn-success">Approve</a>
+                    <a href="{% url 'reject' idd=i.leave_id %}/#dd" class="btn btn-danger">Reject</a></td>
             </tr>
             {% endfor %}
     </table>
     </center>
 </body>
 </html>
-{% endblock %}
+{% endblock %} {% endcomment %}

@@ -34,18 +34,18 @@
 
                     <!-- Joining Date Field -->
                     <div class="form-group">
-                        <input type="date" name="date" value="{{ dd.joining_date|date:'Y-m-d' }}" class="form-control p-4" style="font-family: 'Times New Roman'" required="required" />
+                        <input type="date" name="date" value="{{ dd.joining_date|date:'Y-m-d' }}"  placeholder="Enter Joining Date" class="form-control p-4" style="font-family: 'Times New Roman'" required="required" />
                         <span id="dateError" style="color: red;"></span>
                     </div><br>
 
                     <!-- Name Field -->
                     <div class="form-group">
-                        <input type="text" name="ne" value="{{ dd.name }}" class="form-control p-4" style="font-family: 'Times New Roman'" required="required" />
+                        <input type="text" name="ne" value="{{ dd.name }}"  placeholder="Enter Student Name" class="form-control p-4" style="font-family: 'Times New Roman'" required="required" />
                     </div><br>
 
                     <!-- Mess Number Field -->
                     <div class="form-group">
-                        <input type="text" name="d" value="{{ dd.department }}" class="form-control p-4" style="font-family: 'Times New Roman'" required="required" />
+                        <input type="text" name="d" value="{{ dd.department }}"  placeholder="Enter Department" class="form-control p-4" style="font-family: 'Times New Roman'" required="required" />
                     </div><br>
 
                     <!-- Update Button -->

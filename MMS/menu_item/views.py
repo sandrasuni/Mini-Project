@@ -122,7 +122,7 @@ def menu(request):
             obj.save()
 
         # Success message
-        messages.success(request, "Menu items added successfully!")
+        # messages.success(request, "Menu items added successfully!")
         return redirect('menu')  # Redirect to prevent resubmission
 
     selected_day = request.GET.get('day', '')  # Get the selected day from the request
@@ -180,7 +180,7 @@ def update_item(request, item_id):
         item.save()  # Save the updated item to the database
 
         # Display a success message and redirect to the manage page
-        messages.success(request, 'Special item updated successfully!')
+        # messages.success(request, 'Special item updated successfully!')
         return redirect('manage')  # Ensure 'manage' is the name of your manage view
 
     # If it's not a POST request, render the update page with existing item data
@@ -293,6 +293,51 @@ def manage(request):
     }
 
     return render(request, 'menu_item/manage.html', context)
+
+def view_menu(request):
+    if request.method == 'POST':
+        # Handle POST request: form submission to add new menu items
+        day = request.POST.get('day')
+        breakfast_item = request.POST.get('breakfast_items')
+        lunch_item = request.POST.get('lunch_items')
+        tea_snack_item = request.POST.get('tea_snack_items')
+        dinner_item = request.POST.get('dinner_items')
+        special_item_name = request.POST.get('special_item_name')
+        price = request.POST.get('price')
+
+        # Save menu items to the Menu model
+        if breakfast_item:
+            Menu.objects.create(day=day, menu_type='Breakfast', menu_item=breakfast_item)
+        if lunch_item:
+            Menu.objects.create(day=day, menu_type='Lunch', menu_item=lunch_item)
+        if tea_snack_item:
+            Menu.objects.create(day=day, menu_type='Tea Snack', menu_item=tea_snack_item)
+        if dinner_item:
+            Menu.objects.create(day=day, menu_type='Dinner', menu_item=dinner_item)
+        if special_item_name and price:
+            Menu.objects.create(day=day, menu_type='Special', menu_item=special_item_name, price=price)
+
+        return redirect('view_menu')  # Redirect to avoid re-submitting the form on page refresh
+
+    # Handle GET request: Fetch the existing menu items
+    selected_day = request.GET.get('day', '')  # Get the selected day from the request
+    if selected_day:
+        menu_items = Menu.objects.filter(day=selected_day)  # Filter menu items by selected day
+    else:
+        menu_items = Menu.objects.all()  # Get all menu items if no day is selected
+
+    # Prepare context data
+    context = {
+        'breakfast_items': menu_items.filter(menu_type='breakfast'),
+        'lunch_items': menu_items.filter(menu_type='lunch'),
+        'tea_snack_items': menu_items.filter(menu_type='tea_snacks'),
+        'dinner_items': menu_items.filter(menu_type='dinner'),
+        'special_items': menu_items.filter(menu_type='special'),
+        'selected_day': selected_day,  # Pass the selected day to the template
+    }
+
+    return render(request, 'menu_item/view_menu.html', context)  # Adjust the template path if necessary
+
 
 # def manage(request):
 #     if request.method == 'POST':

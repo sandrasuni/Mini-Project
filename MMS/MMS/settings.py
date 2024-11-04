@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'presence_log.apps.PresenceLogConfig',
     'stock.apps.StockConfig',
     'student.apps.StudentConfig',
+    'report.apps.ReportConfig',
     'Temp.apps.TempConfig',
 ]
 
@@ -73,6 +74,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'stock.context_processors.low_stock_count',
             ],
         },
     },

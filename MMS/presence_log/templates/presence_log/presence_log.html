@@ -6,227 +6,75 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Presence Log</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        // Fetch student details based on Mess No.
-        function fetchStudentDetails(mess_id) {
-            if (mess_id) {
-                fetch(`/api/get_student_details/${mess_id}/`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.name) {
-                            document.getElementById("student_name").value = data.name;
-                        } else {
-                            document.getElementById("student_name").value = '';
-                        }
-                    })
-                    .catch(error => console.error('Error:', error));
+        function fetchStudentDetails(messId) {
+            if (messId) {
+                $.ajax({
+                    url: '{% url "fetch_student_details" %}',  // Your endpoint to fetch student details
+                    type: 'GET',
+                    data: {
+                        'mess_id': messId
+                    },
+                    success: function(data) {
+                        // Assuming the response is a JSON object with student details
+                        $('#student_name').val(data.student_name);
+                        $('#department').val(data.department);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching student details:', error);
+                        // Optionally clear the fields if there is an error
+                        $('#student_name').val('');
+                        $('#department').val('');
+                    }
+                });
             } else {
-                document.getElementById("student_name").value = '';
+                // Clear the fields if mess_id is empty
+                $('#student_name').val('');
+                $('#department').val('');
             }
         }
 
-        // Validate the date selection
-        function validateDates() {
-            const fromDate = document.getElementById("from_date").value;
-            const toDate = document.getElementById("to_date").value;
-            const errorField = document.getElementById("dateError");
-
-            if (toDate < fromDate) {
-                errorField.innerHTML = "To Date cannot be earlier than From Date.";
-                return false;
-            } else {
-                errorField.innerHTML = "";
-                return true;
-            }
-        }
-
-        // Search and fetch presence data based on selected dates
-        function searchPresenceLog() {
-            if (!validateDates()) return; // Stop if date validation fails
-
-            const mess_id = document.getElementById("mess_id").value;
-            const from_date = document.getElementById("from_date").value;
-            const to_date = document.getElementById("to_date").value;
-
-            fetch(`/api/search_presence_log/${mess_id}?from_date=${from_date}&to_date=${to_date}`)
-                .then(response => response.json())
-                .then(data => {
-                    let billTableBody = document.getElementById("billTableBody");
-                    billTableBody.innerHTML = ''; // Clear previous data
-                    
-                    data.presence_logs.forEach(log => {
-                        const row = `<tr>
-                            <td>${log.date}</td>
-                            <td>${student.daily_amount}</td>
-                            <td>${log.extra_amount}</td>
-                            <td>${log.status}</td>
-                        </tr>`;
-                        billTableBody.innerHTML += row;
-                    });
-                })
-                .catch(error => console.error('Error:', error));
-        }
     </script>
 </head>
 <body>
     <center>
-        {% comment %} <h1>Presence Log</h1> {% endcomment %}
         <form onsubmit="return false;">
             {% csrf_token %}
-    <center>
-        <table><br><br><br>
             <div class="col-lg-5">
                 <div class="card-body rounded-bottom bg-dark p-5">
-                    <h1 style="font-family: 'Times New Roman';color: peru" align="center">PRESENCE LOG</h1><br>
+                    <h1 style="font-family: 'Times New Roman'; color: peru" align="center">PRESENCE LOG</h1><br>
 
-                <div class="form-group">
-                <label for="mess_id" style="color: #fff">Mess No:</label>
-                <input type="text" class="form-control" id="mess_id" placeholder="Enter Mess No" oninput="fetchStudentDetails(this.value)">
+                    <div class="form-group">
+                        <label for="mess_id" style="color: #fff">Mess No:</label>
+                        <input type="text" class="form-control" id="mess_id" placeholder="Enter Mess No" oninput="fetchStudentDetails(this.value)">
+                    </div>
+                    <div class="form-group">
+                        <label for="student_name" style="color: #fff">Name of Student:</label>
+                        <input type="text" class="form-control" id="student_name" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="department" style="color: #fff">Department:</label>
+                        <input type="text" class="form-control" id="department" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="from_date" style="color: #fff">From Date:</label>
+                        <input type="date" class="form-control" id="from_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="to_date" style="color: #fff">To Date:</label>
+                        <input type="date" class="form-control" id="to_date" required>
+                    </div>
+                    <span id="dateError" style="color: red;"></span><br><br>
+                    <!-- Absent and Present Buttons Below Search Button -->
+                    <div style="margin-top: 10px; display: flex; justify-content: space-between;">
+                        <button class="btn btn-danger" type="button" >ABSENT</button>
+                        <button class="btn btn-success" type="button" >PRESENT</button>
+                    </div>
+                </div>
             </div>
-            <div>
-                <label for="student_name" style="color: #fff">Name of Student:</label>
-                <input type="text" class="form-control" id="student_name" readonly>
-            </div>
-            <div>
-                <label for="from_date" style="color: #fff">From Date:</label>
-                <input type="date" class="form-control" id="from_date" required>
-            </div>
-            <div>
-                <label for="to_date" style="color: #fff">To Date:</label>
-                <input type="date" class="form-control" id="to_date" required>
-            </div>
-            <span id="dateError" style="color: red;"></span><br><br>
-
-            <button class="btn btn-primary" type="button" onclick="searchPresenceLog()">SEARCH</button>
         </form>
-
-        <br>
-        <div style="display: flex; justify-content: space-between;">
-            <button class="btn btn-danger" type="button">ABSENT</button>
-            <button class="btn btn-success" type="button">PRESENT</button>
-        </div>
-    </div>
-</div>
-</table>
-</center>
-<br><br>
-        <h3>Bill Details</h3>
-        <table border="1" class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Mess Amount</th>
-                    <th>Extra Amount</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody id="billTableBody">
-                <!-- Bill data will appear here -->
-            </tbody>
-        </table>
     </center>
 </body>
 </html>
 {% endblock %}
-
-
-{% comment %} {% extends 'temp/admin.html' %}
-{% block base %}
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Presence Log</title>
-    <script>
-        // Function to validate that "To Date" is not less than "From Date"
-        function validateDates() {
-            const fromDate = document.getElementById("from_date").value;
-            const toDate = document.getElementById("to_date").value;
-            const errorField = document.getElementById("dateError");
-
-            if (toDate < fromDate) {
-                errorField.innerHTML = "To Date cannot be earlier than From Date.";
-                return false;  // Prevent form submission
-            } else {
-                errorField.innerHTML = "";  // Clear the error message
-                return true;  // Allow form submission
-            }
-        }
-
-        function fetchStudentDetails(mess_id) {
-            if (mess_id) {
-                fetch(`/api/get_student_details/${mess_id}/`)
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log(data);  // Add this line
-                        document.getElementById("student_name").value = data.name || '';
-                        document.getElementById("from_date").value = data.from_date || '';
-                        document.getElementById("to_date").value = data.to_date || '';
-                    })
-                    .catch(error => console.error('Error fetching student details:', error));
-            } else {
-                document.getElementById("student_name").value = '';
-                document.getElementById("from_date").value = '';
-                document.getElementById("to_date").value = '';
-            }
-        }
-        
-
-        window.onload = function() {
-            const today = new Date();
-            today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
-            const todayFormatted = today.toISOString().split('T')[0];
-            document.getElementById("from_date").setAttribute("min", todayFormatted);
-            document.getElementById("to_date").setAttribute("min", todayFormatted);
-        }
-    </script>
-</head>
-<body>
-<form method="post" onsubmit="return validateDates()">
-    {% csrf_token %}
-    <center>
-        <table><br><br><br>
-            <div class="col-lg-5">
-                <div class="card-body rounded-bottom bg-dark p-5">
-                    <h1 style="font-family: 'Times New Roman';color: peru" align="center">PRESENCE LOG</h1><br>
-
-                    <div class="form-group">
-                        <label for="mess_id" style="color: #fff">Mess No:</label>
-                        <input type="text" name="mess_id" id="mess_id" class="form-control" placeholder="Enter Mess No" required oninput="fetchStudentDetails(this.value)">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="student_name" style="color: #fff">Name of Student:</label>
-                        <input type="text" name="student_name" id="student_name" class="form-control" placeholder="Student Name" readonly>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="from_date" style="color: #fff">From Date:</label>
-                        <input type="date" name="from_date" id="from_date" class="form-control" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="to_date" style="color: #fff">To Date:</label>
-                        <input type="date" name="to_date" id="to_date" class="form-control" required>
-                    </div>
-                    
-                    <span id="dateError" style="color: red;"></span><br>
-
-                    <div>
-                        <button class="btn btn-primary btn-block p-3" style="font-family: 'Times New Roman'" type="submit">SEARCH</button>
-                    </div><br>
-
-                    <div style="display: flex; justify-content: space-between;">
-                        <button class="btn btn-primary btn-block p-3" style="font-family: 'Times New Roman'; width: 48%;" type="submit">ABSENT</button>
-                        <button class="btn btn-primary btn-block p-3" style="font-family: 'Times New Roman'; width: 48%;" type="submit">PRESENT</button>
-                    </div>
-
-                </div>
-            </div>
-        </table>
-    </center>
-</form>
-</body>
-</html>
-{% endblock %} {% endcomment %}

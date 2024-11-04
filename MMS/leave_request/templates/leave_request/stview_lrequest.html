@@ -11,7 +11,7 @@
 <center><br><br><br>
 <h1>Leave details</h1><br>
 	<table border="1" class="table table-striped">
-		<tr>
+		<tr style="background-color: #001f3f; color: #ffffff;">
 			<td>Sl.no</td>
 			{% comment %} <td>Mess_no</td> {% endcomment %}
 			<td>from_date</td>
@@ -21,12 +21,12 @@
 		</tr>
         {% for i in b %}
 		<tr>
-			<td>{{ forloop.counter }}</td>
+			<td style="color: black;">{{ forloop.counter }}</td>
             {% comment %} <td>{{ i.mess.mess_id }}</td> {% endcomment %}
-			<td>{{ i.from_date }}</td>
-			<td>{{ i.to_date }}</td>
-			<td>{{ i.reason}}</td>
-			<td>{{ i.status}}</td>
+			<td style="color: black;">{{ i.from_date }}</td>
+			<td style="color: black;">{{ i.to_date }}</td>
+			<td style="color: black;">{{ i.reason}}</td>
+			<td style="color: black;">{{ i.status}}</td>
 		</tr>
         {% endfor %}
 	</table>

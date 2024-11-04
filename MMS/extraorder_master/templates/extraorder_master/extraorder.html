@@ -1,0 +1,135 @@
+{% extends 'Temp/admin.html' %}
+{% block base %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Extra Order</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function updateTotalPrice() {
+            const price = parseFloat($('#price').val()) || 0;
+            const quantity = parseInt($('#quantity').val()) || 0;
+            $('#total_price').val((price * quantity).toFixed(2));
+        }
+
+        function fetchStudentName() {
+            const messNo = $('#mess_no').val();
+            if (messNo) {
+                $.getJSON('{% url "fetch_student_name" %}', { mess_no: messNo }, function(response) {
+                    $('#student_name').val(response.student_name || '');
+                });
+            } else {
+                $('#student_name').val('');
+            }
+        }
+
+        function fetchItemDetails() {
+            const itemCode = $('#item_code').val();
+            if (itemCode) {
+                $.getJSON('{% url "fetch_item_details" %}', { item_code: itemCode }, function(response) {
+                    $('#item_name').val(response.item_name || '');
+                    $('#price').val(response.price || '');
+                    updateTotalPrice();
+                });
+            } else {
+                $('#item_name').val('');
+                $('#price').val('');
+                $('#total_price').val('');
+            }
+        }
+    </script>
+    <style>
+        .form-control {
+            height: 40px;
+            font-size: 16px;
+        }
+        .table {
+            width: 100%;
+            margin-top: 30px;
+            margin-bottom: 1rem;
+            background-color: transparent;
+            color: white;
+        }
+        .table th, .table td {
+            padding: 1rem;
+            vertical-align: top;
+            border-top: 1px solid #dee2e6;
+        }
+        .table thead th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #dee2e6;
+        }
+        .table-dark {
+            background-color: #343a40;
+        }
+        .table-dark th, .table-dark td {
+            border-color: #454d55;
+        }
+    </style>
+</head>
+<body>
+    <form method="POST" action="{% url 'add_extra_order' %}#dd">
+        {% csrf_token %}
+        <center>
+            <table>
+                <div class="col-lg-5">
+                    <div class="card-body rounded-bottom bg-dark p-5" id="add_student">
+                        <h1 style="font-family: 'Times New Roman';color: peru" align="center">Extra Order</h1><br>
+                        <div class="form-group d-flex">
+                            <div class="mr-3" style="flex: 1;">
+                                <label for="mess_no" style="color:white">Mess No:</label>
+                                <input type="text" name="mess_no" id="mess_no" class="form-control" required placeholder="Enter Mess Number" value="{{ mess_no }}" oninput="fetchStudentName();">
+                            </div>
+                            <div style="flex: 1;">
+                                <label for="student_name" style="color:white">Student Name:</label>
+                                <input type="text" name="student_name" id="student_name" class="form-control" placeholder="Student Name" value="{{ student_name }}" readonly>
+                            </div>
+                        </div><br>
+                        
+                        <div class="form-group">
+                            <label for="order_date" style="color:white">Order Date:</label>
+                            <input type="date" name="order_date" class="form-control" required value="{{ order_date }}">
+                        </div><br>
+                        <div class="form-group">
+                            <label for="item_code" style="color:white">Item Code:</label>
+                            <input type="text" name="item_code" id="item_code" class="form-control" required 
+                                   placeholder="Enter Item Code" value="{{ item_code }}" 
+                                   pattern="\d*" oninput="fetchItemDetails();" title="Please enter only numbers.">
+                        </div>
+                        <br>                        
+                        <div class="form-group">
+                            <label for="item_name" style="color:white">Item Name:</label>
+                            <input type="text" name="item_name" id="item_name" class="form-control" placeholder="Item Name" value="{{ item_name }}" readonly>
+                        </div><br>
+                        <div class="form-group">
+                            <label for="price" style="color:white">Price:</label>
+                            <input type="text" name="price" id="price" class="form-control" placeholder="Price" value="{{ price }}" readonly>
+                        </div><br>
+                        <div class="form-group">
+                            <label for="quantity" style="color:white">Quantity:</label>
+                            <input type="number" min=1 name="quantity" id="quantity" class="form-control" required placeholder="Enter Quantity" value="{{ quantity }}" oninput="updateTotalPrice();">
+                        </div><br>
+                        <div class="form-group">
+                            <label for="total_price" style="color:white">Total Price:</label>
+                            <input type="text" name="total_price" id="total_price" class="form-control" required placeholder="Total Price" readonly value="{{ total_price }}">
+                        </div><br>
+                        <div>
+                            <button class="btn btn-primary btn-block p-3" style="font-family: 'Times New Roman'" type="submit">Add Extra Order</button>
+                        </div>
+                    </div>
+                </div>
+            </table>
+        </center>
+
+        {% if error %}
+            <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
+        {% if success_message %}
+            <div class="alert alert-success">{{ success_message }}</div>
+        {% endif %}
+    </form>
+</body>
+</html>
+{% endblock %}

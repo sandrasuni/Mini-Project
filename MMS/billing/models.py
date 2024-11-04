@@ -5,14 +5,11 @@ from student.models import Student
 
 class MessBill(models.Model):
     messbill_id = models.AutoField(primary_key=True)
-    month = models.DateField()
-    year = models.DateField()
-    date = models.DateField()
-    mess_id = models.IntegerField()
-    student_name = models.CharField(max_length=45)
-    mess_amount = models.IntegerField()
-    extra_amount = models.IntegerField()
-    total_amount = models.IntegerField()
+    billing_date = models.DateField()
+    mess=models.ForeignKey(Student,to_field='mess_id',on_delete=models.CASCADE)
+    mess_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    extra_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:
         managed = False

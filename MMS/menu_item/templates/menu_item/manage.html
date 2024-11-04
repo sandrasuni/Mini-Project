@@ -71,7 +71,7 @@
 <body>
     <h1>Manage Menu Items</h1>
 <br>
-    <form method="GET" action="{% url 'manage' %}">
+    <form method="GET" action="{% url 'manage' %}/#dd">
         <label for="day">Select Day:</label>
         <select name="day" id="day" onchange="this.form.submit()">
             <option value="">All Days</option>
@@ -94,8 +94,8 @@
         </tr>
         {% for item in breakfast_items %}
         <tr>
-            <td>{{ forloop.counter }}</td>
-            <td>{{ item.menu_item }}</td>
+            <td style="color: black;">{{ forloop.counter }}</td>
+            <td style="color: black;">{{ item.menu_item }}</td>
             <td>
                 <a href="{% url 'bb' item.menu_id %}/#dd" class="btn btn-danger" >Delete</a>
             </td>
@@ -116,8 +116,8 @@
         </tr>
         {% for item in lunch_items %}
         <tr>
-            <td>{{ forloop.counter }}</td>
-            <td>{{ item.menu_item }}</td>
+            <td style="color: black;">{{ forloop.counter }}</td>
+            <td style="color: black;">{{ item.menu_item }}</td>
             <td>
                 <a href="{% url 'bb' item.menu_id %}/#dd" class="btn btn-danger">Delete</a>
             </td>
@@ -138,8 +138,8 @@
     </tr>
     {% for item in tea_snack_items %}
     <tr>
-        <td>{{ forloop.counter }}</td>
-        <td>{{ item.menu_item }}</td> <!-- Fixed closing tag -->
+        <td style="color: black;">{{ forloop.counter }}</td>
+        <td style="color: black;">{{ item.menu_item }}</td> <!-- Fixed closing tag -->
         <td>
             <a href="{% url 'bb' item.menu_id %}/#dd" class="btn btn-danger">Delete</a>
         </td>
@@ -162,8 +162,8 @@
         </tr>
         {% for item in dinner_items %}
         <tr>
-            <td>{{ forloop.counter }}</td>
-            <td>{{ item.menu_item }}</td>
+            <td style="color: black;">{{ forloop.counter }}</td>
+            <td style="color: black;">{{ item.menu_item }}</td>
             <td>
                 <a href="{% url 'bb' item.menu_id %}/#dd" class="btn btn-danger">Delete</a>
             </td>
@@ -185,9 +185,9 @@
         </tr>
         {% for item in special_items %}
         <tr>
-            <td>{{ forloop.counter }}</td>
-            <td>{{ item.menu_item }}</td>
-            <td>{{ item.price }}</td>
+            <td style="color: black;">{{ forloop.counter }}</td>
+            <td style="color: black;">{{ item.menu_item }}</td>
+            <td style="color: black;">{{ item.price }}</td>
             <td>
                 <a href="{% url 'bb' item.menu_id %}/#dd" class="btn btn-danger">Delete</a>
                 <a href="{% url 'aa' item.menu_id %}/#dd" class="btn btn-primary">Update</a>

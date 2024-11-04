@@ -4,31 +4,97 @@ from leave_request.models import LeaveRequest
 from datetime import datetime
 from django.utils import timezone
 from student.models import Student
-# from student.models import
-# import datetime
-def leave(request):
-    # dd=datetime.datetime.today()
-    date_time = timezone.now().strftime("%Y-%m-%d")
-    ss=request.session["uid"]
-    student_instance = Student.objects.get(pk=ss)
+from django.db.models import Q
 
-    if request.method=="POST":
-        obj=LeaveRequest()
-        obj.mess = student_instance 
-        #obj.mess= "1"
-        # obj.department = 
-        obj.from_date = request.POST.get('from_date')
-        # obj.from_date=datetime.datetime.today()
-        obj.to_date = request.POST.get('to_date')
-        obj.reason = request.POST.get('reason')
-        obj.status = 'PENDING' 
-        obj.save()
-    context={
-        'dt': date_time        
-    }  
+
+# def leave(request):
+#     # Get the current date and time
+#     date_time = timezone.now().strftime("%Y-%m-%d")
+    
+#     # Get leave_id from the session without error handling
+#     leave_id = request.session.get("uid")
+
+#     # Retrieve the student instance using the leave_id from the session
+#     student_instance = Student.objects.get(pk=leave_id)
+
+#     if request.method == "POST":
+#         # Create a new LeaveRequest instance
+#         obj = LeaveRequest()
+#         obj.mess = student_instance  # Set the related student instance
+#         obj.from_date = request.POST.get('from_date')
+#         obj.to_date = request.POST.get('to_date')
+#         obj.reason = request.POST.get('reason')
+#         obj.status = 'PENDING'
+#         obj.save()  # Save the new leave request to the database
+    
+#     # Prepare the context with the current date to display in the template
+#     context = {
+#         'dt': date_time
+#     }
+    
+#     # Render the leave request form
+#     return render(request, 'leave_request/leave_request.html', context)
+
+
+def leave(request):
+    # Get the current date
+    date_time = timezone.now().strftime("%Y-%m-%d")
+
+    # Get leave_id from the session
+    leave_id = request.session.get("uid")
+
+    # Retrieve the student instance using the leave_id from the session
+    student_instance = Student.objects.get(pk=leave_id)
+
+    if request.method == "POST":
+        # Retrieve form data
+        from_date = request.POST.get('from_date')
+        to_date = request.POST.get('to_date')
+        reason = request.POST.get('reason')
+
         
-        # return redirect('view_leave')  # Redirect to the page after submitting
-    return render(request, 'leave_request/leave_request.html',context)
+
+        status_filter = Q(status='PENDING') | Q(status='Approved')
+        existing_requests = LeaveRequest.objects.filter(
+        mess=student_instance,
+        from_date__lte=to_date,
+        to_date__gte=from_date
+        ).filter(status_filter)
+
+
+
+        if existing_requests.exists():
+            # If there's an existing overlapping request, render the form with an error message
+            error_message = "You have already submitted a leave request for this date range."
+            context = {
+                'dt': date_time,
+                'error_message': error_message,
+                'from_date': from_date,  # Keep the entered from_date
+                'to_date': to_date,      # Keep the entered to_date
+                'reason': reason         # Keep the entered reason
+            }
+            return render(request, 'leave_request/leave_request.html', context)
+
+        # Create a new LeaveRequest instance
+        obj = LeaveRequest(
+            mess=student_instance,  # Set the related student instance
+            from_date=from_date,
+            to_date=to_date,
+            reason=reason,
+            status='PENDING'
+        )
+        obj.save()  # Save the new leave request to the database
+
+        # Redirect back to the leave request form without a success message
+      # Assuming 'leave' is the name of the URL for this view
+
+    # Prepare the context with the current date to display in the template
+    context = {
+        'dt': date_time
+    }
+
+    # Render the leave request form
+    return render(request, 'leave_request/leave_request.html', context)
 
 def ml(request):
     obj=LeaveRequest.objects.all()
@@ -38,18 +104,41 @@ def ml(request):
     return render(request,'leave_request/manage_leave.html',context)
 
 # Approve leave request
-def approve_leave_request(request,idd):
-    obj=LeaveRequest.objects.get(leave_id=idd)
-    obj.status='Approved'
-    obj.save()
-    return ml(request)
+# def approve_leave_request(request,idd):
+#     obj=LeaveRequest.objects.get(leave_id=idd)
+#     obj.status='Approved'
+#     obj.save()
+#     return ml(request)
 
-def reject_leave_request(request,idd):
-    obj=LeaveRequest.objects.get(leave_id=idd)
-    obj.status='Rejected'
-    obj.save()
-    return ml(request)
+# def reject_leave_request(request,idd):
+#     obj=LeaveRequest.objects.get(leave_id=idd)
+#     obj.status='Rejected'
+#     obj.save()
+#     return ml(request)
     # return redirect('/leave_request/ml/')
+
+def approve_leave_request(request, idd):
+    # Get the leave request object or 404 if it doesn't exist
+    obj=LeaveRequest.objects.get(leave_id=idd)
+    
+    # Check if the request is already approved or rejected
+    if obj.status == 'Pending':
+        obj.status = 'Approved'
+        obj.save()
+    
+    return ml(request)  # Redirect back to the manage leave page
+
+# Reject leave request (Admin functionality)
+def reject_leave_request(request, idd):
+    # Get the leave request object or 404 if it doesn't exist
+    obj=LeaveRequest.objects.get(leave_id=idd)
+    
+    # Check if the request is already approved or rejected
+    if obj.status == 'Pending':
+        obj.status = 'Rejected'
+        obj.save()
+    
+    return ml(request)
 
 #def stview(request):
     # obj=LeaveRequest.objects.all()

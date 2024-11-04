@@ -10,30 +10,54 @@
 <body>
     <center>
         <h2>STOCK</h2>
+
+        <!-- Search Form -->
+        <form method="GET" action="">
+            <!-- Search by Item Code -->
+            <input type="text" name="item_code" placeholder="Search by Item Code" value="{{ request.GET.item_code }}">
+            
+            <!-- Search by Item Name -->
+            <input type="text" name="item_name" placeholder="Search by Item Name" value="{{ request.GET.item_name }}">
+            
+            <button type="submit" class="btn btn-secondary">Search</button>
+        </form>
+
+        <br>
+
+        <!-- Stock Table -->
         <table border="1" class="table table-striped">
             <thead style="background-color: #001f3f; color: #ffffff;">
                 <tr>
+                    <th>Sl.no</th>
                     <th>Item Code</th>
                     <th>Item Name</th>
                     <th>Quantity</th>
                     <th>Threshold</th>
                     <th>Price</th>
-                    <th>Update</th>
-                    <th>Delete</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                {% for stock in stocks %}
-                <tr>
-                    <td>{{ stock.item_code }}</td>
-                    <td>{{ stock.item_name }}</td>
-                    <td>{{ stock.stock_quantity }}</td>
-                    <td>{{ stock.threshold }}</td>
-                    <td>{{ stock.price }}</td>
-                    <td><a href="{% url 'su' stock.stock_id %}/#dd" class="btn btn-outline-dark">Update</a></td>
-                    <td><a href="{% url 'sd' stock.stock_id %}/#dd" class="btn btn-outline-dark">Delete</a></td>
-                </tr>
-                {% endfor %}
+                {% if stocks %}
+                    {% for stock in stocks %}
+                    <tr>
+                        <td style="color: black;">{{ forloop.counter }}</td>
+                        <td style="color: black;">{{ stock.item_code }}</td>
+                        <td style="color: black;">{{ stock.item_name }}</td>
+                        <td style="color: black;">{{ stock.stock_quantity }}</td>
+                        <td style="color: black;">{{ stock.threshold }}</td>
+                        <td style="color: black;">{{ stock.price }}</td>
+                        <td>
+                            <a href="{% url 'su' stock.stock_id %}/#dd" class="btn btn-primary">Update</a>
+                            <a href="{% url 'sd' stock.stock_id %}/#dd" class="btn btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="6" style="text-align: center;">No stock found.</td>
+                    </tr>
+                {% endif %}
             </tbody>
         </table>
     </center>

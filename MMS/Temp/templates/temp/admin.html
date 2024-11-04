@@ -84,12 +84,18 @@
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Stock Management
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="/stock/stock/#dd"><i class="fas fa-user-plus" style="margin-right: 10px;"></i>Add Stock</a></li>
-                                    <li><a class="dropdown-item" href="/stock/mansto/#dd"><i class="fas fa-user" style="margin-right: 10px;"></i>Manage stock</a></li>
-                                    <li><a class="dropdown-item" href=""><i class="fas fa-user" style="margin-right: 10px;"></i>Purchase list</a></li>
-                                </ul>
-                            </div>
-                            <a class="nav-link" href="/presence_log/presence_log/#dd">Presence Log</a>
+                                    <li><a class="dropdown-item" href="/stock/stock/#dd"><i class="fas fa-box-open" style="margin-right: 10px;"></i>Add Stock</a></li>
+                                    <li><a class="dropdown-item" href="/stock/mansto/#dd"><i class="fas fa-warehouse" style="margin-right: 10px;"></i>Manage Stock</a></li>
+                                    {% comment %} <li>
+                                        <a class="dropdown-item" href="/stock/purchase_list/#dd">
+                                            <i class="fas fa-shopping-cart" style="margin-right: 10px;"></i>Purchase List
+                                            {% if low_stock_count > 0 %}
+                                                <span class="badge bg-danger">{{ low_stock_count }}</span>
+                                            {% endif %}
+                                        </a>
+                                    </li>                                </ul> {% endcomment %}
+                             </div>                             
+                            {% comment %} <a class="nav-link" href="/presence_log/presence_log/#dd">Presence Log</a> {% endcomment %}
                             <div class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Menu Management
                                 </a>
@@ -98,6 +104,7 @@
                                     </a></li>
                                     <li><a class="dropdown-item" href="{% url 'manage' %}#dd"><i class="fas fa-edit" style="margin-right: 10px;"></i>Manage Menu
                                     </a></li>
+                                    <li>
                                     
                                 </ul>
                             </div>
@@ -115,12 +122,18 @@
                     <nav class="sidebar" style="margin-top: 20px;">
                             <ul><br><br>
                             <li><a href="/billing/vstubill/#dd">View Student</a></li><br>
-                            <li><a href="">View Stock</a></li><br>
+                            {% comment %} <li><a href="">View Stock</a></li><br> {% endcomment %}
+                            <li><a href="/stock/purchase_list/#dd">Purchase List
+                                {% if low_stock_count > 0 %}
+                                    <span class="badge bg-danger">{{ low_stock_count }}</span>
+                                {% endif %}
+                            </a></li><br>
                             <li><a href="/leave_request/ds/#dd">Day Student</a></li><br>
-                            <li><a href="">Extra Order</a></li><br>
+                            <li><a href="/extraorder_master/add-extra-order/#dd">Extra Order</a></li><br>
+                            <li><a href="/extraorder_master/view-extra-orders/#dd">View Extra</a></li><br>
                             <li><a href="/leave_request/ml/#dd">Student Leave</a></li><br>
                             <li><a href="/billing/billing/#dd">Bill</a></li><br>
-                            <li><a href="">Report</a></li>
+                            <li><a href="/report/profit_loss_report/#dd">Report</a></li>
                             </ul>
                         </nav>
                     </div>

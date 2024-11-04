@@ -30,6 +30,8 @@ urlpatterns = [
     url('presence_log/', include('presence_log.url')),
     url('mess_amount/', include('mess_amount.url')),
     url('leave_request/', include('leave_request.url')),
+    url('extraorder_master/', include('extraorder_master.url')),
+    url('report/', include('report.url')),
     url('Temp/',include('Temp.url')),
     url('$',views.home)
 ]

@@ -3,33 +3,76 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Manage Students</title>
+    <style>
+        .total-count {
+            font-size: 1.5em; /* Increase the font size */
+            font-weight: bold; /* Make the text bold */
+            color: #28a745; /* Set the text color to green */
+            margin-bottom: 20px; /* Add space below the total count */
+            padding: 10px; /* Add some padding */
+            border: 2px solid #28a745; /* Add a green border */
+            border-radius: 5px; /* Round the corners */
+            background-color: #f8f9fa; /* Light background color */
+            text-align: center; /* Center the text */
+            width: 50%; /* Set a width for better centering */
+            margin-left: auto; /* Center horizontally */
+            margin-right: auto; /* Center horizontally */
+        }
+    </style>
 </head>
 <body>
 <center><br><br>
 <h1>MANAGE STUDENT</h1><br>
-	<table border="1" class="table table-striped">
-		<tr>
-			<td>Date</td>
-			<td>Mess_no</td>
-			<td>Department</td>
-			<td>Student_name</td>
-		</tr>
-         {% for i in dd %}
-		<tr>
-			<td>{{ i.joining_date }}</td>
-			<td>{{ i.mess_id}}</td>
-			<td>{{ i.department }}</td>
-			<td>{{ i.name }}</td>
-			<td><a href="{% url 'upd' idd=i.mess_id %}/#dd" class="btn btn-outline-dark">Update</a></td>
-			<td><a href="{% url 'del' idd=i.mess_id %}/#dd" class="btn btn-outline-dark">Delete</td>
-		</tr>
-        {% endfor %}
-	</table>
-</center>
 
+<!-- Display Total Count of Students -->
+<p class="total-count">Total Students Registered: <strong>{{ total_students }}</strong></p>  <!-- Displaying total count -->
+<br><br>
+<!-- Search Form -->
+<form method="GET" action="">
+    <label for="student_name">Student Name:</label>
+    <input type="text" name="student_name" id="student_name" value="{{ request.GET.student_name }}">
+    
+    <label for="mess_no">Mess No:</label>
+    <input type="text" name="mess_no" id="mess_no" value="{{ request.GET.mess_no }}">
+    
+    <button type="submit" class="btn btn-success">Search</button>
+</form>
+
+<br>
+
+<table border="1" class="table table-striped">
+    <tr style="background-color: #001f3f; color: #ffffff;">
+        <td>Date</td>
+        <td>Mess No</td>
+        <td>Department</td>
+        <td>Student Name</td>
+        <td>Actions</td>
+    </tr>
+
+    {% if dd %}
+        {% for i in dd %}
+        <tr>
+            <td style="color: black;">{{ i.joining_date }}</td>
+            <td style="color: black;">{{ i.mess_id }}</td>
+            <td style="color: black;">{{ i.department }}</td>
+            <td style="color: black;">{{ i.name }}</td>
+            <td>
+                <a href="{% url 'upd' idd=i.mess_id %}/#dd" class="btn btn-primary me-2">Update</a>
+                <a href="{% url 'del' idd=i.mess_id %}/#dd" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td colspan="5" style="color: black; text-align: center;">No results found</td>
+        </tr>
+    {% endif %}
+</table>
+
+</center>
 </body>
 </html>
 {% endblock %}
